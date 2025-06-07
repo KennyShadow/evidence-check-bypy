@@ -16,6 +16,7 @@ from ..models.income_record import IncomeRecord
 from ..data.excel_handler import ExcelHandler
 from ..data.data_processor import DataProcessor
 from ..data.file_manager import FileManager
+from ..data.project_manager import ProjectManager
 from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME
 
 
@@ -26,10 +27,18 @@ class MainWindow:
         self.logger = logging.getLogger(__name__)
         
         # 初始化核心组件
+        self.project_manager = ProjectManager()
         self.database = Database()
         self.excel_handler = ExcelHandler()
         self.data_processor = DataProcessor()
         self.file_manager = FileManager()
+        
+        # 加载当前项目
+        self.current_project_config = self.project_manager.get_current_project_config()
+        if self.current_project_config:
+            # 如果有当前项目，使用项目的数据库和存储路径
+            self.database = Database(Path(self.current_project_config["database_file"]))
+            self.file_manager = FileManager(self.current_project_config["attachments_dir"])
         
         # 设置CustomTkinter主题
         ctk.set_appearance_mode(THEME_CONFIG["appearance_mode"])
@@ -56,7 +65,12 @@ class MainWindow:
     
     def setup_window(self):
         """设置窗口属性"""
-        self.root.title(WINDOW_CONFIG["title"])
+        # 设置窗口标题（包含项目信息）
+        title = WINDOW_CONFIG["title"]
+        if self.current_project_config:
+            title += f" - [{self.current_project_config['name']}]"
+        self.root.title(title)
+        
         self.root.geometry(WINDOW_CONFIG["geometry"])
         self.root.minsize(WINDOW_CONFIG["min_width"], WINDOW_CONFIG["min_height"])
         
@@ -243,6 +257,12 @@ class MainWindow:
             self.update_statistics()
             self.update_status("数据加载完成")
             self.logger.info(f"加载了 {len(self.current_records)} 条记录")
+            
+            # 更新项目记录数量
+            if self.current_project_config:
+                record_count = len(self.current_records)
+                self.project_manager.update_project_record_count(count=record_count)
+                
         except Exception as e:
             self.logger.error(f"加载数据失败: {e}")
             self.update_status("数据加载失败")
@@ -663,13 +683,61 @@ class MainWindow:
         try:
             settings_dialog = ctk.CTkToplevel(self.root)
             settings_dialog.title("系统设置")
-            settings_dialog.geometry("500x400")
+            settings_dialog.geometry("600x500")
             settings_dialog.transient(self.root)
             settings_dialog.grab_set()
             
             # 主框架
             main_frame = ctk.CTkFrame(settings_dialog)
             main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+            
+            # 项目管理区域
+            project_frame = ctk.CTkFrame(main_frame)
+            project_frame.pack(fill="x", padx=5, pady=5)
+            
+            ctk.CTkLabel(project_frame, text="项目管理", font=("微软雅黑", 14, "bold")).pack(anchor="w", padx=10, pady=5)
+            
+            # 当前项目信息
+            current_project_frame = ctk.CTkFrame(project_frame)
+            current_project_frame.pack(fill="x", padx=10, pady=5)
+            
+            if self.current_project_config:
+                project_info = f"""当前项目: {self.current_project_config['name']}
+项目描述: {self.current_project_config.get('description', '无描述')}
+记录数量: {self.current_project_config.get('record_count', 0)}
+创建时间: {self.current_project_config['created_time'][:16]}"""
+            else:
+                project_info = "当前未选择项目，使用默认设置"
+            
+            ctk.CTkLabel(current_project_frame, text=project_info, justify="left").pack(anchor="w", padx=10, pady=5)
+            
+            # 项目操作按钮
+            project_btn_frame = ctk.CTkFrame(project_frame)
+            project_btn_frame.pack(fill="x", padx=10, pady=5)
+            
+            def new_project():
+                from .project_dialog import NewProjectDialog
+                dialog = NewProjectDialog(settings_dialog, self.project_manager)
+                result = dialog.show()
+                if result:
+                    # 刷新当前项目信息
+                    self.current_project_config = self.project_manager.get_current_project_config()
+                    settings_dialog.destroy()
+                    self.show_settings()  # 重新打开设置对话框显示最新信息
+            
+            def manage_projects():
+                from .project_dialog import ProjectListDialog
+                dialog = ProjectListDialog(settings_dialog, self.project_manager)
+                result = dialog.show()
+                if result and result.get("action") == "switch":
+                    # 切换项目后重新加载
+                    self.current_project_config = result["project_config"]
+                    self.reload_project()
+                    settings_dialog.destroy()
+                    messagebox.showinfo("提示", "项目切换成功，数据已重新加载")
+            
+            ctk.CTkButton(project_btn_frame, text="新建项目", command=new_project, width=120).pack(side="left", padx=5)
+            ctk.CTkButton(project_btn_frame, text="项目管理", command=manage_projects, width=120).pack(side="left", padx=5)
             
             # 存储设置
             storage_frame = ctk.CTkFrame(main_frame)
@@ -793,11 +861,45 @@ class MainWindow:
         self.status_label.configure(text=message)
         self.root.update_idletasks()
     
+    def reload_project(self):
+        """重新加载项目"""
+        try:
+            if self.current_project_config:
+                # 先保存当前数据
+                self.database.save()
+                
+                # 重新初始化数据库和文件管理器
+                self.database = Database(Path(self.current_project_config["database_file"]))
+                self.file_manager = FileManager(self.current_project_config["attachments_dir"])
+                
+                # 重新加载数据
+                self.load_data()
+                
+                # 更新窗口标题
+                title = WINDOW_CONFIG["title"] + f" - [{self.current_project_config['name']}]"
+                self.root.title(title)
+                
+                # 更新项目记录数量
+                record_count = len(self.current_records)
+                self.project_manager.update_project_record_count(count=record_count)
+                
+                self.logger.info(f"项目重新加载完成: {self.current_project_config['name']}")
+            
+        except Exception as e:
+            self.logger.error(f"重新加载项目失败: {e}")
+            messagebox.showerror("错误", f"重新加载项目失败: {e}")
+    
     def on_closing(self):
         """窗口关闭事件"""
         try:
             # 保存数据
             self.database.save()
+            
+            # 更新项目记录数量
+            if self.current_project_config:
+                record_count = len(self.current_records)
+                self.project_manager.update_project_record_count(count=record_count)
+            
             self.logger.info("程序正常退出")
             self.root.destroy()
         except Exception as e:

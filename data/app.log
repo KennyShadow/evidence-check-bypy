@@ -1394,3 +1394,102 @@
 2025-06-07 13:13:28,730 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\7-新致-销售合同及收入确认情况审查-3-29备份.xlsx, 共3532行数据
 2025-06-07 13:14:23,244 - src.models.database - INFO - 成功保存数据库，共3501条记录
 2025-06-07 13:14:23,244 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:29:08,995 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:29:09,659 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:29:09,659 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 13:29:09,668 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:29:09,669 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:29:13,185 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:29:13,185 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:29:13,185 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:30:00,054 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:30:00,054 - src.data.project_manager - INFO - 创建项目成功: 新致软件2024 (新致软件2024_20250607_133000)
+2025-06-07 13:30:10,071 - src.gui.project_dialog - ERROR - 加载项目列表失败: Display column #0 cannot be set
+2025-06-07 13:30:15,384 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:30:15,384 - src.data.project_manager - INFO - 切换到项目: 新致软件2024 (新致软件2024_20250607_133000)
+2025-06-07 13:30:16,388 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:30:16,388 - src.models.database - ERROR - 加载数据库失败: 'str' object has no attribute 'exists'
+2025-06-07 13:30:16,388 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11
+2025-06-07 13:30:17,642 - src.gui.main_window - INFO - 加载了 0 条记录
+2025-06-07 13:30:17,643 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:30:17,643 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:30:17,643 - src.gui.main_window - INFO - 项目重新加载完成: 新致软件2024
+2025-06-07 13:31:05,612 - src.data.file_manager - INFO - 存储路径已更新为: D:\00-工作\11
+2025-06-07 13:31:06,087 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共474行数据
+2025-06-07 13:31:09,542 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:31:22,189 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:31:22,190 - src.data.excel_handler - INFO - 使用用户指定的列映射: {'合同编号': '合同号', '客户': '客户名', '2024年\n财报收入': '本年确认的收入'}
+2025-06-07 13:31:22,324 - src.data.excel_handler - INFO - 成功转换3501条记录
+2025-06-07 13:31:22,329 - src.models.database - INFO - 开始导入Excel数据，共3501条记录
+2025-06-07 13:31:22,330 - src.models.database - INFO - 开始批量更新数据...
+2025-06-07 13:31:22,330 - src.models.database - INFO - 已更新 1000/3501 条记录到内存
+2025-06-07 13:31:22,331 - src.models.database - INFO - 已更新 2000/3501 条记录到内存
+2025-06-07 13:31:22,331 - src.models.database - INFO - 已更新 3000/3501 条记录到内存
+2025-06-07 13:31:22,331 - src.models.database - INFO - 开始保存数据到文件...
+2025-06-07 13:31:22,331 - src.models.database - ERROR - 保存数据库失败: 'str' object has no attribute 'parent'
+2025-06-07 13:31:22,331 - src.models.database - ERROR - 保存数据到文件失败
+2025-06-07 13:31:37,708 - src.models.database - ERROR - 保存数据库失败: 'str' object has no attribute 'parent'
+2025-06-07 13:31:37,708 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:31:37,709 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:32:37,360 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:32:38,050 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 13:32:38,050 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 13:32:38,060 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:32:38,060 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:32:38,061 - src.models.database - INFO - 数据库文件不存在，创建新数据库
+2025-06-07 13:32:38,061 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11
+2025-06-07 13:32:38,634 - src.gui.main_window - INFO - 加载了 0 条记录
+2025-06-07 13:32:38,635 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:32:38,635 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:32:38,635 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:32:57,784 - src.data.file_manager - INFO - 存储路径已更新为: D:\00-工作\11
+2025-06-07 13:32:58,340 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共474行数据
+2025-06-07 13:33:04,643 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:33:17,822 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:33:17,823 - src.data.excel_handler - INFO - 使用用户指定的列映射: {'合同编号': '合同号', '客户': '客户名', '2024年\n财报收入': '本年确认的收入'}
+2025-06-07 13:33:17,957 - src.data.excel_handler - INFO - 成功转换3501条记录
+2025-06-07 13:33:17,963 - src.models.database - INFO - 开始导入Excel数据，共3501条记录
+2025-06-07 13:33:17,963 - src.models.database - INFO - 开始批量更新数据...
+2025-06-07 13:33:17,964 - src.models.database - INFO - 已更新 1000/3501 条记录到内存
+2025-06-07 13:33:17,964 - src.models.database - INFO - 已更新 2000/3501 条记录到内存
+2025-06-07 13:33:17,964 - src.models.database - INFO - 已更新 3000/3501 条记录到内存
+2025-06-07 13:33:17,965 - src.models.database - INFO - 开始保存数据到文件...
+2025-06-07 13:33:17,977 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:33:17,977 - src.models.database - INFO - 导入Excel数据成功，共3501条记录
+2025-06-07 13:33:23,968 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:33:23,969 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:34:20,772 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:34:20,773 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:34:20,773 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:34:35,333 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:34:35,996 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 13:34:35,996 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 13:34:36,006 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:34:36,006 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:34:36,024 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:34:36,025 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11
+2025-06-07 13:34:39,007 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:34:39,008 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:34:39,008 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:34:39,008 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:34:44,274 - src.gui.project_dialog - ERROR - 加载项目列表失败: Display column #0 cannot be set
+2025-06-07 13:36:42,726 - src.gui.project_dialog - ERROR - 加载项目列表失败: Display column #0 cannot be set
+2025-06-07 13:36:53,871 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:36:53,872 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:36:53,872 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:37:57,664 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:37:58,299 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 13:37:58,299 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 13:37:58,309 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:37:58,309 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:37:58,326 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:37:58,327 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11
+2025-06-07 13:38:01,212 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:38:01,213 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:38:01,213 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:38:01,213 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:38:16,437 - src.data.project_manager - INFO - 删除项目文件: projects\新致软件2024_20250607_133000
+2025-06-07 13:38:16,438 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:38:16,438 - src.data.project_manager - INFO - 删除项目: 新致软件2024 (新致软件2024_20250607_133000)
+2025-06-07 13:38:33,805 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:38:33,805 - src.gui.main_window - INFO - 程序正常退出
