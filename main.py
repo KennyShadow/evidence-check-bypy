@@ -61,11 +61,20 @@ def main():
     
     try:
         # 导入GUI模块（延迟导入以确保依赖检查通过）
+        from src.gui.project_launcher import ProjectLauncher
         from src.gui.main_window import MainWindow
         
-        # 创建并运行主窗口
-        app = MainWindow()
-        app.run()
+        # 首先显示项目启动器
+        launcher = ProjectLauncher()
+        selected_project_id = launcher.show()
+        
+        # 如果用户选择了项目，则启动主窗口
+        if selected_project_id:
+            logger.info(f"启动主窗口，当前项目: {selected_project_id}")
+            app = MainWindow()
+            app.run()
+        else:
+            logger.info("用户取消选择项目，程序退出")
         
     except Exception as e:
         logger.error(f"程序运行出错: {e}", exc_info=True)

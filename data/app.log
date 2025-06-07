@@ -1549,3 +1549,214 @@
 2025-06-07 13:54:12,798 - src.models.database - INFO - 成功保存数据库，共3501条记录
 2025-06-07 13:54:12,799 - src.data.project_manager - INFO - 项目配置保存成功
 2025-06-07 13:54:12,799 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 14:07:47,536 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 14:07:48,154 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 14:07:48,155 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 14:07:48,164 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 14:07:48,164 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 14:07:48,173 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 14:07:48,174 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22SZ001（产值框架）
+2025-06-07 14:07:48,556 - __main__ - ERROR - 程序运行出错: 'MainWindow' object has no attribute 'on_search'
+Traceback (most recent call last):
+  File "D:\04-工程项目\10-收入核查-bypy\main.py", line 67, in main
+    app = MainWindow()
+  File "D:\04-工程项目\10-收入核查-bypy\src\gui\main_window.py", line 77, in __init__
+    self.create_widgets()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "D:\04-工程项目\10-收入核查-bypy\src\gui\main_window.py", line 106, in create_widgets
+    self.create_toolbar()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "D:\04-工程项目\10-收入核查-bypy\src\gui\main_window.py", line 139, in create_toolbar
+    self.search_entry.bind("<KeyRelease>", self.on_search)
+                                           ^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'on_search'. Did you mean: 'column_search'?
+2025-06-07 14:08:30,121 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 14:08:30,744 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 14:08:30,744 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 14:08:30,754 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 14:08:30,754 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 14:08:30,763 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 14:08:30,764 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22SZ001（产值框架）
+2025-06-07 14:08:33,821 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 14:08:33,822 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 14:08:33,822 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 14:08:33,822 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 14:09:20,878 - src.data.project_manager - INFO - 删除项目文件: projects\新致2024_20250607_135025
+2025-06-07 14:09:20,879 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 14:09:20,879 - src.data.project_manager - INFO - 删除项目: 新致2024 (新致2024_20250607_135025)
+2025-06-07 14:09:35,452 - src.gui.main_window - INFO - 筛选完成，显示 3500 条记录
+2025-06-07 14:09:35,452 - src.gui.main_window - INFO - 已清除列搜索条件
+2025-06-07 14:09:41,161 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 14:09:41,161 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 21:36:47,732 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 21:36:49,803 - src.data.project_manager - INFO - 加载项目配置: 0 个项目
+2025-06-07 21:36:49,803 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:36:49,820 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:36:49,820 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 21:36:52,740 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 21:36:52,741 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 21:36:52,741 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 21:37:26,615 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 21:37:26,615 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 21:46:32,787 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 21:46:33,527 - src.data.project_manager - INFO - 加载项目配置: 0 个项目
+2025-06-07 21:46:33,527 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:46:33,965 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 21:47:10,618 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:47:10,618 - src.data.project_manager - INFO - 创建项目成功: 测试项目 (测试项目_20250607_214710)
+2025-06-07 21:47:11,827 - src.gui.project_launcher - INFO - 新建项目成功: 测试项目
+2025-06-07 21:47:13,558 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:47:14,145 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:47:14,145 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 21:47:14,145 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 21:47:14,146 - __main__ - INFO - 启动主窗口，当前项目: 测试项目_20250607_214710
+2025-06-07 21:47:14,152 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:47:14,153 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:47:14,163 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:47:14,164 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 21:47:14,164 - src.models.database - INFO - 数据库文件不存在，创建新数据库
+2025-06-07 21:47:14,165 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 21:47:14,565 - src.gui.main_window - INFO - 加载了 0 条记录
+2025-06-07 21:47:14,566 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:47:14,566 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 21:47:14,567 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 21:47:43,062 - src.data.file_manager - INFO - 存储路径已更新为: D:\00-工作\11
+2025-06-07 21:47:43,658 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共474行数据
+2025-06-07 21:47:48,115 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 21:48:08,109 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 21:48:08,110 - src.data.excel_handler - INFO - 使用用户指定的列映射: {'合同编号': '合同号', '客户': '客户名', '2024年\n财报收入': '本年确认的收入', '签约方': '收入主体'}
+2025-06-07 21:48:08,240 - src.data.excel_handler - INFO - 成功转换3501条记录
+2025-06-07 21:48:08,250 - src.models.database - INFO - 开始导入Excel数据，共3501条记录
+2025-06-07 21:48:08,250 - src.models.database - INFO - 开始批量更新数据...
+2025-06-07 21:48:08,251 - src.models.database - INFO - 已更新 1000/3501 条记录到内存
+2025-06-07 21:48:08,251 - src.models.database - INFO - 已更新 2000/3501 条记录到内存
+2025-06-07 21:48:08,252 - src.models.database - INFO - 已更新 3000/3501 条记录到内存
+2025-06-07 21:48:08,252 - src.models.database - INFO - 开始保存数据到文件...
+2025-06-07 21:48:08,266 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 21:48:08,266 - src.models.database - INFO - 导入Excel数据成功，共3501条记录
+2025-06-07 21:48:13,165 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 21:48:13,166 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:48:15,633 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:50:15,089 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 21:50:15,910 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:50:15,910 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:50:16,469 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:50:16,469 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 21:50:17,655 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:50:19,437 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:50:20,359 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:50:20,359 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 21:50:20,359 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 21:50:20,359 - __main__ - INFO - 启动主窗口，当前项目: 测试项目_20250607_214710
+2025-06-07 21:50:20,366 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:50:20,367 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:50:20,376 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:50:20,376 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 21:50:20,394 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:50:20,395 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 21:50:23,581 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 21:50:23,582 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:50:23,582 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 21:50:23,582 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 21:50:51,225 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 21:51:39,155 - src.gui.main_window - INFO - 筛选完成，显示 312 条记录
+2025-06-07 21:56:39,303 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 21:56:40,025 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:56:40,025 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:56:40,562 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:56:40,562 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 21:56:41,621 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:56:42,464 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:56:42,465 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 21:56:42,465 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 21:56:42,465 - __main__ - INFO - 启动主窗口，当前项目: 测试项目_20250607_214710
+2025-06-07 21:56:42,472 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:56:42,472 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:56:42,480 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:56:42,481 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 21:56:42,490 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:56:42,491 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 21:56:45,295 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 21:56:45,296 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:56:45,296 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 21:56:45,296 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 21:57:26,175 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 21:57:26,231 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 21:57:26,232 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 21:57:26,423 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 21:57:26,424 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 21:57:28,629 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 21:57:28,647 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 21:57:28,647 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 21:57:31,387 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 21:57:31,388 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:57:31,388 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 21:57:31,388 - src.gui.main_window - INFO - 项目重新加载完成: 测试项目
+2025-06-07 21:57:31,415 - src.gui.main_window - INFO - 切换到项目: 测试项目_20250607_214710
+2025-06-07 22:03:12,368 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 22:03:13,177 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 22:03:13,178 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 22:03:13,630 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 22:03:13,630 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 22:03:16,012 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:03:16,012 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 22:03:16,012 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 22:03:16,112 - __main__ - INFO - 启动主窗口，当前项目: 测试项目_20250607_214710
+2025-06-07 22:03:16,119 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 22:03:16,120 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 22:03:16,129 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 22:03:16,129 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 22:03:16,138 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 22:03:16,139 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 22:03:18,629 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 22:03:18,630 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:03:18,630 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 22:03:18,631 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 22:03:53,104 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 22:04:47,211 - src.data.file_manager - INFO - 成功保存附件: 22EB129\1111111.pdf
+2025-06-07 22:04:47,212 - src.gui.attachment_dialog - INFO - 成功添加附件: D:/系统文件夹/桌面/1111111.pdf
+2025-06-07 22:05:15,781 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:05:15,782 - src.models.database - INFO - 更新收入记录: 22EB129
+2025-06-07 22:05:18,655 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 22:05:18,655 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:05:35,172 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 22:05:44,194 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:05:44,245 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 22:05:44,245 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 22:05:44,441 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 22:05:44,442 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 22:05:47,897 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:05:47,897 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 22:05:47,897 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 22:33:18,606 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 22:33:19,295 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 22:33:19,295 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 22:33:19,759 - src.gui.project_launcher - INFO - 选择项目: 测试项目
+2025-06-07 22:33:19,760 - src.gui.project_launcher - INFO - 项目启动器初始化完成
+2025-06-07 22:33:21,512 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:33:21,512 - src.data.project_manager - INFO - 切换到项目: 测试项目 (测试项目_20250607_214710)
+2025-06-07 22:33:21,512 - src.gui.project_launcher - INFO - 切换到项目: 测试项目
+2025-06-07 22:33:21,634 - __main__ - INFO - 启动主窗口，当前项目: 测试项目_20250607_214710
+2025-06-07 22:33:21,644 - src.data.project_manager - INFO - 加载项目配置: 1 个项目
+2025-06-07 22:33:21,644 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 22:33:21,655 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 22:33:21,655 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 22:33:21,665 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 22:33:21,666 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22EB129
+2025-06-07 22:33:23,568 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:33:23,568 - src.gui.main_window - INFO - 筛选完成，显示 3500 条记录
+2025-06-07 22:33:24,925 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 22:33:24,926 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:33:24,926 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 22:33:24,926 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 22:33:38,976 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:33:38,977 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 22:33:48,364 - src.data.file_manager - INFO - 成功保存附件: 22EB129\0c22f9560773695b955c.pdf
+2025-06-07 22:33:48,365 - src.gui.attachment_dialog - INFO - 成功添加附件: D:/系统文件夹/桌面/0c22f9560773695b955c.pdf
+2025-06-07 22:34:09,575 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:34:09,575 - src.models.database - INFO - 更新收入记录: 22EB129
+2025-06-07 22:34:12,191 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:34:12,191 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 22:38:41,013 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 22:38:41,013 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 22:38:41,014 - src.gui.main_window - INFO - 程序正常退出

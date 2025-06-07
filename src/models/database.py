@@ -26,6 +26,7 @@ class Database:
         self.income_records: Dict[str, IncomeRecord] = {}  # 合同号 -> 收入记录
         self.attachments: Dict[str, Attachment] = {}  # 附件ID -> 附件信息
         self.versions: List[Dict[str, Any]] = []  # 版本历史
+        self.filter_states: Dict[str, Any] = {}  # 筛选状态
         self.metadata: Dict[str, Any] = {
             "created_time": datetime.now(),
             "last_modified": datetime.now(),
@@ -46,6 +47,7 @@ class Database:
                 self.income_records = data.get('income_records', {})
                 self.attachments = data.get('attachments', {})
                 self.versions = data.get('versions', [])
+                self.filter_states = data.get('filter_states', {})
                 self.metadata = data.get('metadata', self.metadata)
                 
                 self.logger.info(f"成功加载数据库，共{len(self.income_records)}条记录")
@@ -73,6 +75,7 @@ class Database:
                 'income_records': self.income_records,
                 'attachments': self.attachments,
                 'versions': self.versions,
+                'filter_states': self.filter_states,
                 'metadata': self.metadata
             }
             
@@ -354,12 +357,39 @@ class Database:
             self.logger.error(f"获取统计信息失败: {e}")
             return {}
     
+    def save_filter_states(self, filter_states: Dict[str, Any], column_search: Dict[str, Any]) -> bool:
+        """保存筛选状态"""
+        try:
+            self.filter_states = {
+                "filter_states": filter_states,
+                "column_search": column_search,
+                "saved_time": datetime.now().isoformat()
+            }
+            return self.save()
+        except Exception as e:
+            self.logger.error(f"保存筛选状态失败: {e}")
+            return False
+    
+    def get_filter_states(self) -> Dict[str, Any]:
+        """获取筛选状态"""
+        return self.filter_states
+    
+    def clear_filter_states(self) -> bool:
+        """清除筛选状态"""
+        try:
+            self.filter_states = {}
+            return self.save()
+        except Exception as e:
+            self.logger.error(f"清除筛选状态失败: {e}")
+            return False
+    
     def clear_all_data(self) -> bool:
         """清空所有数据"""
         try:
             self.income_records.clear()
             self.attachments.clear()
             self.versions.clear()
+            self.filter_states.clear()
             self.metadata = {
                 "created_time": datetime.now(),
                 "last_modified": datetime.now(),

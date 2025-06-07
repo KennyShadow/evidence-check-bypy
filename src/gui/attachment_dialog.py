@@ -96,8 +96,17 @@ class AttachmentDialog:
         ctk.CTkLabel(title_frame, text="附件列表", font=("微软雅黑", 14, "bold")).pack(side="left", padx=10)
         
         # 添加按钮
-        add_btn = ctk.CTkButton(title_frame, text="添加附件", command=self.add_attachment, width=100)
-        add_btn.pack(side="right", padx=5)
+        add_btn = ctk.CTkButton(
+            title_frame, 
+            text="📎 添加附件", 
+            command=self.add_attachment, 
+            width=140, 
+            height=35,
+            font=("微软雅黑", 12, "bold"),
+            fg_color="#1E90FF",
+            hover_color="#4169E1"
+        )
+        add_btn.pack(side="right", padx=10)
         
         # 附件列表
         self.create_attachment_tree(list_frame)
@@ -167,27 +176,99 @@ class AttachmentDialog:
     def create_action_buttons(self, parent):
         """创建操作按钮区域"""
         button_frame = ctk.CTkFrame(parent)
-        button_frame.pack(fill="x", padx=5, pady=5)
+        button_frame.pack(fill="x", padx=5, pady=10)
         
         # 左侧按钮
         left_frame = ctk.CTkFrame(button_frame)
         left_frame.pack(side="left", padx=5)
         
-        refresh_btn = ctk.CTkButton(left_frame, text="刷新", command=self.load_attachments, width=80)
-        refresh_btn.pack(side="left", padx=2)
+        refresh_btn = ctk.CTkButton(
+            left_frame, 
+            text="🔄 刷新", 
+            command=self.load_attachments, 
+            width=120, 
+            height=35,
+            font=("微软雅黑", 12)
+        )
+        refresh_btn.pack(side="left", padx=5)
         
-        open_folder_btn = ctk.CTkButton(left_frame, text="打开文件夹", command=self.open_contract_folder, width=100)
-        open_folder_btn.pack(side="left", padx=2)
+        open_folder_btn = ctk.CTkButton(
+            left_frame, 
+            text="📁 打开文件夹", 
+            command=self.open_contract_folder, 
+            width=140, 
+            height=35,
+            font=("微软雅黑", 12)
+        )
+        open_folder_btn.pack(side="left", padx=5)
+        
+        # 中间按钮（文件操作）
+        middle_frame = ctk.CTkFrame(button_frame)
+        middle_frame.pack(side="left", padx=20)
+        
+        open_file_btn = ctk.CTkButton(
+            middle_frame,
+            text="📄 打开文件",
+            command=self.open_selected_attachment,
+            width=120,
+            height=35,
+            font=("微软雅黑", 12),
+            fg_color="#2B8C2B",
+            hover_color="#228B22"
+        )
+        open_file_btn.pack(side="left", padx=5)
+        
+        rename_btn = ctk.CTkButton(
+            middle_frame,
+            text="✏️ 重命名",
+            command=self.rename_attachment,
+            width=120,
+            height=35,
+            font=("微软雅黑", 12),
+            fg_color="#FF8C00",
+            hover_color="#FF7F00"
+        )
+        rename_btn.pack(side="left", padx=5)
+        
+        delete_btn = ctk.CTkButton(
+            middle_frame,
+            text="🗑️ 删除",
+            command=self.delete_selected_attachment,
+            width=120,
+            height=35,
+            font=("微软雅黑", 12),
+            fg_color="#DC143C",
+            hover_color="#B22222"
+        )
+        delete_btn.pack(side="left", padx=5)
         
         # 右侧按钮
         right_frame = ctk.CTkFrame(button_frame)
         right_frame.pack(side="right", padx=5)
         
-        cancel_btn = ctk.CTkButton(right_frame, text="取消", command=self.cancel, width=80)
-        cancel_btn.pack(side="right", padx=2)
+        cancel_btn = ctk.CTkButton(
+            right_frame, 
+            text="❌ 取消", 
+            command=self.cancel, 
+            width=120, 
+            height=35,
+            font=("微软雅黑", 12),
+            fg_color="gray",
+            hover_color="darkgray"
+        )
+        cancel_btn.pack(side="right", padx=5)
         
-        ok_btn = ctk.CTkButton(right_frame, text="确定", command=self.save_and_close, width=80)
-        ok_btn.pack(side="right", padx=2)
+        ok_btn = ctk.CTkButton(
+            right_frame, 
+            text="✅ 确定", 
+            command=self.save_and_close, 
+            width=120, 
+            height=35,
+            font=("微软雅黑", 12),
+            fg_color="#2B8C2B",
+            hover_color="#228B22"
+        )
+        ok_btn.pack(side="right", padx=5)
     
     def load_attachments(self):
         """加载附件列表"""

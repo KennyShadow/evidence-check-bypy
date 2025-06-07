@@ -54,7 +54,7 @@ class MainWindow:
         
         # 分页相关
         self.current_page = 1
-        self.page_size = 50  # 每页显示50条记录
+        self.page_size = 25  # 每页显示25条记录，减少提高性能
         self.total_pages = 1
         
         # 筛选状态管理
@@ -62,7 +62,15 @@ class MainWindow:
             "difference": set(),      # 差异状态筛选
             "attachment": set(),      # 附件状态筛选  
             "contract": set(),        # 合同状态筛选
-            "subject": set()          # 收入主体筛选
+            "subject": set(),         # 收入主体筛选
+            "client": set()           # 客户筛选
+        }
+        
+        # 列搜索状态
+        self.column_search = {
+            "column": None,
+            "keyword": "",
+            "mode": "包含"
         }
         
         # 创建界面
@@ -112,6 +120,13 @@ class MainWindow:
         ctk.CTkButton(file_frame, text="导入Excel", command=self.import_excel, width=100).pack(side="left", padx=2)
         ctk.CTkButton(file_frame, text="导出数据", command=self.export_data, width=100).pack(side="left", padx=2)
         
+        # 项目操作
+        project_frame = ctk.CTkFrame(toolbar_frame)
+        project_frame.pack(side="left", padx=10)
+        
+        ctk.CTkLabel(project_frame, text="项目操作:", font=("微软雅黑", 12, "bold")).pack(side="left", padx=5)
+        ctk.CTkButton(project_frame, text="切换项目", command=self.switch_project, width=100).pack(side="left", padx=2)
+        
         # 数据操作
         data_frame = ctk.CTkFrame(toolbar_frame)
         data_frame.pack(side="left", padx=10)
@@ -121,15 +136,7 @@ class MainWindow:
         ctk.CTkButton(data_frame, text="统计分析", command=self.show_statistics, width=100).pack(side="left", padx=2)
         ctk.CTkButton(data_frame, text="设置", command=self.show_settings, width=100).pack(side="left", padx=2)
         
-        # 搜索框
-        search_frame = ctk.CTkFrame(toolbar_frame)
-        search_frame.pack(side="right", padx=5)
-        
-        ctk.CTkLabel(search_frame, text="搜索:", font=("微软雅黑", 12)).pack(side="left", padx=5)
-        self.search_entry = ctk.CTkEntry(search_frame, placeholder_text="输入关键词搜索", width=200)
-        self.search_entry.pack(side="left", padx=2)
-        self.search_entry.bind("<KeyRelease>", self.on_search)
-        ctk.CTkButton(search_frame, text="清除", command=self.clear_search, width=60).pack(side="left", padx=2)
+
     
     def create_content_area(self):
         """创建内容区域"""
@@ -145,6 +152,17 @@ class MainWindow:
         filter_frame.pack(side="left", fill="y", padx=(0, 5))
         
         ctk.CTkLabel(filter_frame, text="数据筛选", font=("微软雅黑", 14, "bold")).pack(pady=10)
+        
+        # 列搜索状态显示
+        search_status_frame = ctk.CTkFrame(filter_frame)
+        search_status_frame.pack(fill="x", padx=10, pady=5)
+        
+        ctk.CTkLabel(search_status_frame, text="列搜索状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.search_status_label = ctk.CTkLabel(search_status_frame, text="未设置搜索条件", text_color="gray")
+        self.search_status_label.pack(anchor="w", padx=5, pady=2)
+        
+        clear_search_btn = ctk.CTkButton(search_status_frame, text="清除搜索", command=self.clear_column_search, width=80, height=25)
+        clear_search_btn.pack(anchor="w", padx=5, pady=2)
         
         # 筛选选项 - 改为按钮形式
         # 差异状态筛选
@@ -186,6 +204,16 @@ class MainWindow:
             width=120, height=28
         )
         self.subject_filter_btn.pack(fill="x", padx=5, pady=2)
+        
+        # 客户筛选
+        client_frame = ctk.CTkFrame(filter_frame)
+        client_frame.pack(fill="x", padx=10, pady=5)
+        ctk.CTkLabel(client_frame, text="客户名称:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.client_filter_btn = ctk.CTkButton(
+            client_frame, text="点击筛选", command=lambda: self.show_multi_filter("client"),
+            width=120, height=28
+        )
+        self.client_filter_btn.pack(fill="x", padx=5, pady=2)
         
         ctk.CTkButton(filter_frame, text="清除筛选", command=self.clear_filters).pack(fill="x", padx=10, pady=10)
         
@@ -248,11 +276,76 @@ class MainWindow:
         self.page_size_option.pack(side="left", padx=2)
         ctk.CTkLabel(page_size_frame, text="条").pack(side="left", padx=2)
         
-        # 创建滚动框
-        self.table_scrollable = ctk.CTkScrollableFrame(table_frame)
-        self.table_scrollable.pack(fill="both", expand=True, padx=5, pady=5)
+        # 创建带横向滚动的表格容器
+        table_container = ctk.CTkFrame(table_frame)
+        table_container.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        # 使用Canvas实现横向滚动
+        import tkinter as tk
+        from tkinter import ttk
+        
+        self.table_canvas = tk.Canvas(table_container, bg="#212121", highlightthickness=0)
+        self.table_scrollbar_h = ttk.Scrollbar(table_container, orient="horizontal", command=self.table_canvas.xview)
+        self.table_scrollbar_v = ttk.Scrollbar(table_container, orient="vertical", command=self.table_canvas.yview)
+        
+        self.table_canvas.configure(
+            xscrollcommand=self.table_scrollbar_h.set, 
+            yscrollcommand=self.table_scrollbar_v.set,
+            scrollregion=(0, 0, 1200, 1000)  # 预设滚动区域
+        )
+        
+        # 表格内容框架
+        self.table_content_frame = ctk.CTkFrame(self.table_canvas)
+        self.table_canvas_window = self.table_canvas.create_window((0, 0), window=self.table_content_frame, anchor="nw")
+        
+        # 布局滚动条和画布
+        self.table_canvas.grid(row=0, column=0, sticky="nsew")
+        self.table_scrollbar_h.grid(row=1, column=0, sticky="ew")
+        self.table_scrollbar_v.grid(row=0, column=1, sticky="ns")
+        
+        # 配置网格权重
+        table_container.grid_rowconfigure(0, weight=1)
+        table_container.grid_columnconfigure(0, weight=1)
+        
+        # 绑定滚动事件
+        self.table_content_frame.bind("<Configure>", self.on_table_frame_configure)
+        self.table_canvas.bind("<Configure>", self.on_table_canvas_configure)
+        
+        # 绑定鼠标滚轮事件以优化滚动体验
+        self.table_canvas.bind("<MouseWheel>", self.on_mousewheel)
+        self.table_canvas.bind("<Button-4>", self.on_mousewheel)
+        self.table_canvas.bind("<Button-5>", self.on_mousewheel)
         
         self.refresh_table()
+    
+    def on_table_frame_configure(self, event):
+        """表格框架配置更改时的处理"""
+        # 更新滚动区域
+        self.table_canvas.configure(scrollregion=self.table_canvas.bbox("all"))
+    
+    def on_table_canvas_configure(self, event):
+        """表格画布配置更改时的处理"""
+        # 调整内容框架的宽度以适应画布，但保持最小宽度
+        canvas_width = max(event.width, 1200)
+        self.table_canvas.itemconfig(self.table_canvas_window, width=canvas_width)
+    
+    def on_mousewheel(self, event):
+        """鼠标滚轮事件处理"""
+        # 优化滚动性能
+        if event.delta:
+            # Windows
+            delta = -1 * (event.delta / 120)
+        else:
+            # Linux
+            if event.num == 4:
+                delta = -1
+            elif event.num == 5:
+                delta = 1
+            else:
+                return
+        
+        # 滚动画布
+        self.table_canvas.yview_scroll(int(delta), "units")
     
     def create_status_bar(self):
         """创建状态栏"""
@@ -271,11 +364,24 @@ class MainWindow:
             self.current_records = self.database.get_all_income_records()
             self.filtered_records = self.current_records.copy()
             
-            # 初始化筛选状态
-            self.init_filter_states()
+            # 尝试恢复保存的筛选状态
+            saved_states = self.database.get_filter_states()
+            if saved_states and "filter_states" in saved_states:
+                self.filter_states = saved_states["filter_states"]
+                self.column_search = saved_states["column_search"]
+                self.logger.info("恢复了保存的筛选状态")
+            else:
+                # 初始化筛选状态
+                self.init_filter_states()
             
             self.current_page = 1  # 重置到第一页
+            
+            # 应用筛选
+            self.apply_multi_filters()
+            
             self.refresh_table()
+            self.update_filter_button_texts()
+            self.update_search_status()
             self.update_statistics()
             self.update_status("数据加载完成")
             self.logger.info(f"加载了 {len(self.current_records)} 条记录")
@@ -316,32 +422,67 @@ class MainWindow:
             self.next_page_btn.configure(state="disabled" if self.current_page >= self.total_pages else "normal")
             self.last_page_btn.configure(state="disabled" if self.current_page >= self.total_pages else "normal")
             
-            # 清除现有内容
-            for widget in self.table_scrollable.winfo_children():
+            # 清除现有内容（优化性能）
+            for widget in self.table_content_frame.winfo_children():
                 widget.destroy()
             
+            # 强制更新界面以避免累积
+            self.table_content_frame.update_idletasks()
+            
             if not self.filtered_records:
-                no_data_label = ctk.CTkLabel(self.table_scrollable, text="暂无数据")
+                no_data_label = ctk.CTkLabel(self.table_content_frame, text="暂无数据")
                 no_data_label.pack(pady=50)
                 return
             
+            # 定义表头信息（显示名称和固定宽度）
+            header_info = [
+                ("合同号", 150),
+                ("客户名", 200),
+                ("收入主体", 150),
+                ("本年确认收入", 120),
+                ("附件确认收入", 120),
+                ("差异", 100),
+                ("附件数", 80),
+                ("状态", 80),
+                ("操作", 150)
+            ]
+            
             # 创建表头
-            headers = ["合同号", "客户名", "收入主体", "本年确认收入", "附件确认收入", "差异", "附件数", "状态", "操作"]
-            header_frame = ctk.CTkFrame(self.table_scrollable)
-            header_frame.pack(fill="x", padx=5, pady=2)
+            header_frame = ctk.CTkFrame(self.table_content_frame)
+            header_frame.pack(fill="x", padx=2, pady=2)
             
-            for i, header in enumerate(headers):
-                label = ctk.CTkLabel(header_frame, text=header, font=("微软雅黑", 12, "bold"))
-                label.grid(row=0, column=i, padx=5, pady=5, sticky="ew")
+            # 设置固定最小宽度，确保可以横向滚动
+            total_width = sum(width for _, width in header_info)
+            header_frame.configure(width=max(total_width, 1200))  # 最小宽度1200px
             
-            # 设置列权重
-            for i in range(len(headers)):
-                header_frame.grid_columnconfigure(i, weight=1)
+            for i, (header_text, width) in enumerate(header_info):
+                # 配置列权重为0，保持固定宽度
+                header_frame.grid_columnconfigure(i, minsize=width, weight=0)
+                
+                # 创建可点击的表头按钮（除了操作列）
+                if header_text != "操作":
+                    header_btn = ctk.CTkButton(
+                        header_frame, 
+                        text=f"🔍 {header_text}", 
+                        font=("微软雅黑", 11, "bold"),
+                        command=lambda col=header_text: self.show_column_search(col),
+                        width=width,
+                        height=30
+                    )
+                    header_btn.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
+                else:
+                    # 操作列不可点击
+                    label = ctk.CTkLabel(header_frame, text=header_text, font=("微软雅黑", 12, "bold"), width=width)
+                    label.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
+            
+            # 设置列的固定宽度
+            for i, (_, width) in enumerate(header_info):
+                header_frame.grid_columnconfigure(i, minsize=width, weight=0)
             
             # 添加分页信息
             if total_records > 0:
-                info_frame = ctk.CTkFrame(self.table_scrollable)
-                info_frame.pack(fill="x", padx=5, pady=2)
+                info_frame = ctk.CTkFrame(self.table_content_frame)
+                info_frame.pack(fill="x", padx=2, pady=2)
                 info_text = f"显示第{start_idx + 1}-{end_idx}条记录"
                 info_label = ctk.CTkLabel(info_frame, text=info_text, font=("微软雅黑", 10))
                 info_label.pack(pady=5)
@@ -361,8 +502,15 @@ class MainWindow:
     def create_record_row(self, record: IncomeRecord, row_idx: int):
         """创建数据行"""
         try:
-            row_frame = ctk.CTkFrame(self.table_scrollable)
-            row_frame.pack(fill="x", padx=5, pady=1)
+            row_frame = ctk.CTkFrame(self.table_content_frame)
+            row_frame.pack(fill="x", padx=2, pady=1)
+            
+            # 定义列宽（与表头一致）
+            column_widths = [150, 200, 150, 120, 120, 100, 80, 80, 150]
+            total_width = sum(column_widths)
+            
+            # 设置行框架的最小宽度
+            row_frame.configure(width=max(total_width, 1200))
             
             # 数据列
             data = [
@@ -376,29 +524,46 @@ class MainWindow:
                 record.change_status or "正常",
             ]
             
-            for i, text in enumerate(data):
-                label = ctk.CTkLabel(row_frame, text=text)
-                label.grid(row=0, column=i, padx=5, pady=2, sticky="ew")
+            # 设置列的固定宽度
+            for i, width in enumerate(column_widths):
+                row_frame.grid_columnconfigure(i, minsize=width, weight=0)
+            
+            # 创建数据标签，使用固定宽度和左对齐
+            for i, (text, width) in enumerate(zip(data, column_widths[:-1])):
+                label = ctk.CTkLabel(
+                    row_frame, 
+                    text=text, 
+                    width=width,
+                    anchor="w",  # 左对齐
+                    font=("微软雅黑", 10)
+                )
+                label.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
             
             # 操作按钮
             action_frame = ctk.CTkFrame(row_frame)
-            action_frame.grid(row=0, column=len(data), padx=5, pady=2, sticky="ew")
+            action_frame.grid(row=0, column=len(data), padx=1, pady=2, sticky="ew")
+            action_frame.configure(width=column_widths[-1])
             
-            edit_btn = ctk.CTkButton(action_frame, text="编辑", width=50, 
-                                   command=lambda r=record: self.edit_record(r))
-            edit_btn.pack(side="left", padx=1)
+            # 使用更紧凑的按钮布局
+            edit_btn = ctk.CTkButton(action_frame, text="编辑", width=40, height=24,
+                                   command=lambda r=record: self.edit_record(r),
+                                   font=("微软雅黑", 9))
+            edit_btn.grid(row=0, column=0, padx=1, pady=1)
             
-            attachment_btn = ctk.CTkButton(action_frame, text="附件", width=50,
-                                         command=lambda r=record: self.manage_attachments(r))
-            attachment_btn.pack(side="left", padx=1)
+            attachment_btn = ctk.CTkButton(action_frame, text="附件", width=40, height=24,
+                                         command=lambda r=record: self.manage_attachments(r),
+                                         font=("微软雅黑", 9))
+            attachment_btn.grid(row=0, column=1, padx=1, pady=1)
             
-            delete_btn = ctk.CTkButton(action_frame, text="删除", width=50,
-                                     command=lambda r=record: self.delete_record(r))
-            delete_btn.pack(side="left", padx=1)
+            delete_btn = ctk.CTkButton(action_frame, text="删除", width=40, height=24,
+                                     command=lambda r=record: self.delete_record(r),
+                                     font=("微软雅黑", 9),
+                                     fg_color="red", hover_color="darkred")
+            delete_btn.grid(row=0, column=2, padx=1, pady=1)
             
-            # 设置列权重
-            for i in range(len(data) + 1):
-                row_frame.grid_columnconfigure(i, weight=1)
+            # 配置操作按钮的列权重
+            for i in range(3):
+                action_frame.grid_columnconfigure(i, weight=1)
                 
         except Exception as e:
             self.logger.error(f"创建数据行失败: {e}")
@@ -466,7 +631,9 @@ class MainWindow:
                     self.update_status("正在刷新界面...")
                     self.root.update_idletasks()
                     
-                    self.load_data()
+                    # 重新加载数据，但保持筛选状态
+                    self.current_records = self.database.get_all_income_records()
+                    self.apply_multi_filters()
                     self.update_status(f"成功导入 {len(records)} 条记录")
                     messagebox.showinfo("成功", f"从工作表 '{selected_sheet}' 成功导入 {len(records)} 条记录")
                 else:
@@ -513,19 +680,7 @@ class MainWindow:
             self.update_status("导出失败")
             messagebox.showerror("错误", error_msg)
     
-    def on_search(self, event=None):
-        """搜索事件处理"""
-        try:
-            # 直接调用多选筛选方法，这会包含搜索逻辑
-            self.apply_multi_filters()
-            
-        except Exception as e:
-            self.logger.error(f"搜索失败: {e}")
-    
-    def clear_search(self):
-        """清除搜索"""
-        self.search_entry.delete(0, "end")
-        self.apply_multi_filters()
+
     
 
 
@@ -579,6 +734,17 @@ class MainWindow:
             subject_entities = self.data_processor.get_unique_values(self.current_records, "收入主体")
             self.filter_states["subject"] = set(entity for entity in subject_entities if entity)
             
+            # 客户选项
+            client_names = self.data_processor.get_unique_values(self.current_records, "客户名")
+            self.filter_states["client"] = set(name for name in client_names if name)
+            
+            # 重置列搜索状态
+            self.column_search = {
+                "column": None,
+                "keyword": "",
+                "mode": "包含"
+            }
+            
             # 更新按钮文本
             self.update_filter_button_texts()
             
@@ -609,6 +775,12 @@ class MainWindow:
             subject_total = len([entity for entity in subject_entities if entity])
             self.subject_filter_btn.configure(text=f"已选 {subject_count}/{subject_total}")
             
+            # 客户按钮
+            client_count = len(self.filter_states["client"])
+            client_names = self.data_processor.get_unique_values(self.current_records, "客户名")
+            client_total = len([name for name in client_names if name])
+            self.client_filter_btn.configure(text=f"已选 {client_count}/{client_total}")
+            
         except Exception as e:
             self.logger.error(f"更新筛选按钮文本失败: {e}")
     
@@ -635,6 +807,11 @@ class MainWindow:
                 items = list(self.data_processor.get_unique_values(self.current_records, "收入主体"))
                 items = [item for item in items if item]  # 过滤空值
                 selected = self.filter_states["subject"]
+            elif filter_type == "client":
+                title = "客户名称"
+                items = list(self.data_processor.get_unique_values(self.current_records, "客户名"))
+                items = [item for item in items if item]  # 过滤空值
+                selected = self.filter_states["client"]
             else:
                 return
             
@@ -655,14 +832,6 @@ class MainWindow:
         try:
             # 从原始记录开始筛选
             filtered = self.current_records.copy()
-            
-            # 应用搜索筛选
-            search_text = self.search_entry.get().strip().lower()
-            if search_text:
-                filtered = [record for record in filtered 
-                           if search_text in record.contract_id.lower() 
-                           or search_text in record.client_name.lower()
-                           or (record.subject_entity and search_text in record.subject_entity.lower())]
             
             # 应用差异状态筛选
             if self.filter_states["difference"]:
@@ -703,10 +872,22 @@ class MainWindow:
                 filtered = [record for record in filtered 
                            if record.subject_entity in self.filter_states["subject"]]
             
+            # 应用客户筛选
+            if self.filter_states["client"]:
+                filtered = [record for record in filtered 
+                           if record.client_name in self.filter_states["client"]]
+            
+            # 应用列搜索筛选
+            if self.column_search["column"] and self.column_search["keyword"]:
+                filtered = self.apply_column_search(filtered)
+            
             self.filtered_records = filtered
             self.current_page = 1  # 重置到第一页
             self.refresh_table()
             self.update_statistics()
+            
+            # 保存筛选状态到数据库
+            self.save_filter_states()
             
             self.logger.info(f"筛选完成，显示 {len(filtered)} 条记录")
             
@@ -714,17 +895,133 @@ class MainWindow:
             self.logger.error(f"应用筛选失败: {e}")
             messagebox.showerror("错误", f"应用筛选失败: {e}")
     
+    def show_column_search(self, column_name: str):
+        """显示列搜索对话框"""
+        try:
+            from .column_search_dialog import ColumnSearchDialog
+            
+            # 获取该列的样本值
+            sample_values = []
+            if column_name == "合同号":
+                sample_values = [record.contract_id for record in self.current_records[:50]]
+            elif column_name == "客户名":
+                sample_values = [record.client_name for record in self.current_records[:50]]
+            elif column_name == "收入主体":
+                sample_values = [record.subject_entity for record in self.current_records[:50] if record.subject_entity]
+            elif column_name == "状态":
+                sample_values = [record.change_status for record in self.current_records[:50] if record.change_status]
+            
+            def on_search_result(result):
+                if result["action"] == "clear":
+                    self.clear_column_search()
+                elif result["action"] == "search":
+                    self.column_search = {
+                        "column": result["column"],
+                        "keyword": result["keyword"],
+                        "mode": result["mode"]
+                    }
+                    self.update_search_status()
+                    self.apply_multi_filters()
+            
+            dialog = ColumnSearchDialog(self.root, column_name, sample_values, on_search_result)
+            dialog.show()
+            
+        except Exception as e:
+            self.logger.error(f"显示列搜索对话框失败: {e}")
+            messagebox.showerror("错误", f"显示搜索对话框失败: {e}")
+    
+    def apply_column_search(self, records):
+        """应用列搜索"""
+        try:
+            column = self.column_search["column"]
+            keyword = self.column_search["keyword"].lower()
+            mode = self.column_search["mode"]
+            
+            filtered = []
+            for record in records:
+                value = ""
+                if column == "合同号":
+                    value = record.contract_id
+                elif column == "客户名":
+                    value = record.client_name
+                elif column == "收入主体":
+                    value = record.subject_entity or ""
+                elif column == "状态":
+                    value = record.change_status or ""
+                
+                value = value.lower()
+                
+                # 根据搜索模式进行匹配
+                if mode == "包含":
+                    if keyword in value:
+                        filtered.append(record)
+                elif mode == "完全匹配":
+                    if keyword == value:
+                        filtered.append(record)
+                elif mode == "开头匹配":
+                    if value.startswith(keyword):
+                        filtered.append(record)
+            
+            return filtered
+            
+        except Exception as e:
+            self.logger.error(f"应用列搜索失败: {e}")
+            return records
+    
+    def clear_column_search(self):
+        """清除列搜索"""
+        try:
+            self.column_search = {
+                "column": None,
+                "keyword": "",
+                "mode": "包含"
+            }
+            self.update_search_status()
+            self.apply_multi_filters()
+            self.logger.info("已清除列搜索条件")
+        except Exception as e:
+            self.logger.error(f"清除列搜索失败: {e}")
+    
+    def update_search_status(self):
+        """更新搜索状态显示"""
+        try:
+            if self.column_search["column"] and self.column_search["keyword"]:
+                status_text = f"搜索 {self.column_search['column']}: \"{self.column_search['keyword']}\" ({self.column_search['mode']})"
+                self.search_status_label.configure(text=status_text, text_color="green")
+            else:
+                self.search_status_label.configure(text="未设置搜索条件", text_color="gray")
+        except Exception as e:
+            self.logger.error(f"更新搜索状态失败: {e}")
+    
+    def save_filter_states(self):
+        """保存筛选状态到数据库"""
+        try:
+            self.database.save_filter_states(self.filter_states, self.column_search)
+        except Exception as e:
+            self.logger.error(f"保存筛选状态失败: {e}")
+    
     def clear_filters(self):
         """清除所有筛选"""
         try:
             # 重置筛选状态为全选
             self.init_filter_states()
             
-            # 清除搜索框
-            self.search_entry.delete(0, "end")
+            # 清除列搜索
+            self.column_search = {
+                "column": None,
+                "keyword": "",
+                "mode": "包含"
+            }
+            
+            # 清除数据库中保存的筛选状态
+            self.database.clear_filter_states()
             
             # 应用筛选
             self.apply_multi_filters()
+            
+            # 更新界面显示
+            self.update_filter_button_texts()
+            self.update_search_status()
             
             self.logger.info("已清除所有筛选条件")
         except Exception as e:
@@ -812,7 +1109,9 @@ class MainWindow:
                 
                 # 添加到数据库
                 if self.database.add_income_record(result):
-                    self.load_data()
+                    # 重新加载数据，但保持筛选状态
+                    self.current_records = self.database.get_all_income_records()
+                    self.apply_multi_filters()
                     self.update_status(f"已添加记录: {result.contract_id}")
                     messagebox.showinfo("成功", "记录添加成功")
                 else:
@@ -951,7 +1250,9 @@ class MainWindow:
             if result:
                 # 更新数据库
                 if self.database.update_income_record(record.contract_id, result):
-                    self.load_data()
+                    # 重新加载数据，但保持筛选状态
+                    self.current_records = self.database.get_all_income_records()
+                    self.apply_multi_filters()
                     self.update_status(f"已更新记录: {result.contract_id}")
                     messagebox.showinfo("成功", "记录更新成功")
                 else:
@@ -972,7 +1273,9 @@ class MainWindow:
             if result:
                 # 更新数据库中的记录
                 if self.database.update_income_record(record.contract_id, record):
-                    self.load_data()  # 刷新界面
+                    # 重新加载数据，但保持筛选状态
+                    self.current_records = self.database.get_all_income_records()
+                    self.apply_multi_filters()  # 应用现有筛选，不重置
                     self.update_status("附件更新成功")
                 else:
                     messagebox.showerror("错误", "保存附件信息失败")
@@ -991,7 +1294,9 @@ class MainWindow:
             
             if result:
                 if self.database.delete_income_record(record.contract_id):
-                    self.load_data()
+                    # 重新加载数据，但保持筛选状态
+                    self.current_records = self.database.get_all_income_records()
+                    self.apply_multi_filters()
                     self.update_status(f"已删除记录: {record.contract_id}")
                     messagebox.showinfo("成功", "记录删除成功")
                 else:
@@ -1004,6 +1309,43 @@ class MainWindow:
         """更新状态栏"""
         self.status_label.configure(text=message)
         self.root.update_idletasks()
+    
+    def switch_project(self):
+        """切换项目"""
+        try:
+            from .project_launcher import ProjectLauncher
+            
+            # 保存当前数据
+            self.database.save()
+            
+            # 获取当前项目ID以检查是否切换了项目
+            old_project_id = self.current_project_config["id"] if self.current_project_config else None
+            
+            # 关闭当前主窗口
+            self.root.withdraw()  # 隐藏窗口而不是销毁
+            
+            # 显示项目启动器
+            launcher = ProjectLauncher()
+            selected_project_id = launcher.show()
+            
+            if selected_project_id:
+                # 检查是否真的切换了项目
+                if selected_project_id != old_project_id:
+                    # 如果选择了不同的项目，重新加载
+                    self.current_project_config = self.project_manager.get_current_project_config()
+                    self.reload_project()
+                    self.logger.info(f"切换到项目: {selected_project_id}")
+                    messagebox.showinfo("提示", "项目切换成功")
+                
+                self.root.deiconify()  # 显示主窗口
+            else:
+                # 如果取消了，也要显示回主窗口
+                self.root.deiconify()
+                
+        except Exception as e:
+            self.logger.error(f"切换项目失败: {e}")
+            messagebox.showerror("错误", f"切换项目失败: {e}")
+            self.root.deiconify()  # 确保窗口显示
     
     def reload_project(self):
         """重新加载项目"""

@@ -1,0 +1,14 @@
+{
+  "id": "测试项目_20250607_214710",
+  "name": "测试项目",
+  "description": "这个项目仅用于测试",
+  "created_time": "2025-06-07T21:47:10.617438",
+  "last_accessed": "2025-06-07T21:47:10.617444",
+  "project_dir": "projects\\测试项目_20250607_214710",
+  "data_dir": "projects\\测试项目_20250607_214710\\data",
+  "attachments_dir": "D:\\00-工作\\11\\22EB129",
+  "backups_dir": "projects\\测试项目_20250607_214710\\backups",
+  "database_file": "projects\\测试项目_20250607_214710\\data\\database.pkl",
+  "record_count": 0,
+  "status": "active"
+}

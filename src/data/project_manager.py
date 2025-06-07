@@ -243,6 +243,19 @@ class ProjectManager:
             return self.projects_config["projects"][self.current_project]
         return None
     
+    def set_current_project(self, project_id: str) -> bool:
+        """
+        设置当前项目
+        
+        Args:
+            project_id: 项目ID
+            
+        Returns:
+            是否成功
+        """
+        success, _, _ = self.switch_project(project_id)
+        return success
+    
     def delete_project(self, project_id: str, delete_files: bool = False) -> Tuple[bool, str]:
         """
         删除项目
