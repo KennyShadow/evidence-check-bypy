@@ -15,6 +15,7 @@ from ..models.database import Database
 from ..models.income_record import IncomeRecord
 from ..data.excel_handler import ExcelHandler
 from ..data.data_processor import DataProcessor
+from ..data.file_manager import FileManager
 from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME
 
 
@@ -28,6 +29,7 @@ class MainWindow:
         self.database = Database()
         self.excel_handler = ExcelHandler()
         self.data_processor = DataProcessor()
+        self.file_manager = FileManager()
         
         # 设置CustomTkinter主题
         ctk.set_appearance_mode(THEME_CONFIG["appearance_mode"])
@@ -40,6 +42,11 @@ class MainWindow:
         # 界面组件
         self.current_records: List[IncomeRecord] = []
         self.filtered_records: List[IncomeRecord] = []
+        
+        # 分页相关
+        self.current_page = 1
+        self.page_size = 50  # 每页显示50条记录
+        self.total_pages = 1
         
         # 创建界面
         self.create_widgets()
@@ -136,6 +143,12 @@ class MainWindow:
         )
         self.contract_filter.pack(fill="x", padx=10, pady=2)
         
+        ctk.CTkLabel(filter_frame, text="收入主体:").pack(anchor="w", padx=10, pady=(10, 0))
+        self.subject_filter = ctk.CTkOptionMenu(
+            filter_frame, values=["全部"], command=self.apply_filters
+        )
+        self.subject_filter.pack(fill="x", padx=10, pady=2)
+        
         ctk.CTkButton(filter_frame, text="清除筛选", command=self.clear_filters).pack(fill="x", padx=10, pady=10)
         
         # 统计信息
@@ -159,6 +172,44 @@ class MainWindow:
         self.count_label = ctk.CTkLabel(title_frame, text="共0条记录")
         self.count_label.pack(side="right")
         
+        # 创建分页控件
+        pagination_frame = ctk.CTkFrame(table_frame)
+        pagination_frame.pack(fill="x", padx=5, pady=2)
+        
+        self.page_info_label = ctk.CTkLabel(pagination_frame, text="第1页，共1页")
+        self.page_info_label.pack(side="left", padx=10)
+        
+        page_control_frame = ctk.CTkFrame(pagination_frame)
+        page_control_frame.pack(side="right", padx=10)
+        
+        self.first_page_btn = ctk.CTkButton(page_control_frame, text="首页", command=self.go_first_page, width=60)
+        self.first_page_btn.pack(side="left", padx=2)
+        
+        self.prev_page_btn = ctk.CTkButton(page_control_frame, text="上一页", command=self.go_prev_page, width=60)
+        self.prev_page_btn.pack(side="left", padx=2)
+        
+        self.next_page_btn = ctk.CTkButton(page_control_frame, text="下一页", command=self.go_next_page, width=60)
+        self.next_page_btn.pack(side="left", padx=2)
+        
+        self.last_page_btn = ctk.CTkButton(page_control_frame, text="末页", command=self.go_last_page, width=60)
+        self.last_page_btn.pack(side="left", padx=2)
+        
+        # 每页条数设置
+        page_size_frame = ctk.CTkFrame(pagination_frame)
+        page_size_frame.pack(side="right", padx=(0, 10))
+        
+        ctk.CTkLabel(page_size_frame, text="每页:").pack(side="left", padx=5)
+        self.page_size_var = ctk.StringVar(value=str(self.page_size))
+        self.page_size_option = ctk.CTkOptionMenu(
+            page_size_frame, 
+            values=["25", "50", "100", "200"], 
+            variable=self.page_size_var,
+            command=self.change_page_size,
+            width=80
+        )
+        self.page_size_option.pack(side="left", padx=2)
+        ctk.CTkLabel(page_size_frame, text="条").pack(side="left", padx=2)
+        
         # 创建滚动框
         self.table_scrollable = ctk.CTkScrollableFrame(table_frame)
         self.table_scrollable.pack(fill="both", expand=True, padx=5, pady=5)
@@ -181,6 +232,13 @@ class MainWindow:
         try:
             self.current_records = self.database.get_all_income_records()
             self.filtered_records = self.current_records.copy()
+            
+            # 更新收入主体筛选选项
+            subject_entities = self.data_processor.get_unique_values(self.current_records, "收入主体")
+            subject_options = ["全部"] + [entity for entity in subject_entities if entity]
+            self.subject_filter.configure(values=subject_options)
+            
+            self.current_page = 1  # 重置到第一页
             self.refresh_table()
             self.update_statistics()
             self.update_status("数据加载完成")
@@ -193,24 +251,40 @@ class MainWindow:
     def refresh_table(self):
         """刷新数据表格"""
         try:
+            # 计算分页信息
+            total_records = len(self.filtered_records)
+            self.total_pages = max(1, (total_records + self.page_size - 1) // self.page_size)
+            
+            # 确保当前页在有效范围内
+            if self.current_page > self.total_pages:
+                self.current_page = max(1, self.total_pages)
+            
+            # 计算当前页显示的记录范围
+            start_idx = (self.current_page - 1) * self.page_size
+            end_idx = min(start_idx + self.page_size, total_records)
+            display_records = self.filtered_records[start_idx:end_idx]
+            
+            # 更新UI显示
+            self.count_label.configure(text=f"共{total_records}条记录")
+            self.page_info_label.configure(text=f"第{self.current_page}页，共{self.total_pages}页")
+            
+            # 更新分页按钮状态
+            self.first_page_btn.configure(state="disabled" if self.current_page <= 1 else "normal")
+            self.prev_page_btn.configure(state="disabled" if self.current_page <= 1 else "normal")
+            self.next_page_btn.configure(state="disabled" if self.current_page >= self.total_pages else "normal")
+            self.last_page_btn.configure(state="disabled" if self.current_page >= self.total_pages else "normal")
+            
             # 清除现有内容
             for widget in self.table_scrollable.winfo_children():
                 widget.destroy()
-            
-            # 更新记录计数
-            self.count_label.configure(text=f"共{len(self.filtered_records)}条记录")
             
             if not self.filtered_records:
                 no_data_label = ctk.CTkLabel(self.table_scrollable, text="暂无数据")
                 no_data_label.pack(pady=50)
                 return
             
-            # 对于大量数据，限制显示条数并添加分页提示
-            max_display_rows = 100  # 限制最多显示100行
-            display_records = self.filtered_records[:max_display_rows]
-            
             # 创建表头
-            headers = ["合同号", "客户名", "本年确认收入", "附件确认收入", "差异", "附件数", "状态", "操作"]
+            headers = ["合同号", "客户名", "收入主体", "本年确认收入", "附件确认收入", "差异", "附件数", "状态", "操作"]
             header_frame = ctk.CTkFrame(self.table_scrollable)
             header_frame.pack(fill="x", padx=5, pady=2)
             
@@ -222,13 +296,13 @@ class MainWindow:
             for i in range(len(headers)):
                 header_frame.grid_columnconfigure(i, weight=1)
             
-            # 如果数据量很大，显示提示信息
-            if len(self.filtered_records) > max_display_rows:
+            # 添加分页信息
+            if total_records > 0:
                 info_frame = ctk.CTkFrame(self.table_scrollable)
-                info_frame.pack(fill="x", padx=5, pady=5)
-                info_text = f"数据量较大，当前仅显示前{max_display_rows}条记录（共{len(self.filtered_records)}条）"
-                info_label = ctk.CTkLabel(info_frame, text=info_text, text_color="orange")
-                info_label.pack(pady=10)
+                info_frame.pack(fill="x", padx=5, pady=2)
+                info_text = f"显示第{start_idx + 1}-{end_idx}条记录"
+                info_label = ctk.CTkLabel(info_frame, text=info_text, font=("微软雅黑", 10))
+                info_label.pack(pady=5)
             
             # 添加数据行
             for idx, record in enumerate(display_records):
@@ -252,6 +326,7 @@ class MainWindow:
             data = [
                 record.contract_id,
                 record.client_name,
+                record.subject_entity or "",
                 f"¥{record.annual_confirmed_income:,.2f}",
                 f"¥{record.attachment_confirmed_income:,.2f}" if record.attachment_confirmed_income else "未设置",
                 f"¥{record.difference:,.2f}" if record.difference else "无差异",
@@ -267,13 +342,17 @@ class MainWindow:
             action_frame = ctk.CTkFrame(row_frame)
             action_frame.grid(row=0, column=len(data), padx=5, pady=2, sticky="ew")
             
-            edit_btn = ctk.CTkButton(action_frame, text="编辑", width=60, 
+            edit_btn = ctk.CTkButton(action_frame, text="编辑", width=50, 
                                    command=lambda r=record: self.edit_record(r))
-            edit_btn.pack(side="left", padx=2)
+            edit_btn.pack(side="left", padx=1)
             
-            delete_btn = ctk.CTkButton(action_frame, text="删除", width=60,
+            attachment_btn = ctk.CTkButton(action_frame, text="附件", width=50,
+                                         command=lambda r=record: self.manage_attachments(r))
+            attachment_btn.pack(side="left", padx=1)
+            
+            delete_btn = ctk.CTkButton(action_frame, text="删除", width=50,
                                      command=lambda r=record: self.delete_record(r))
-            delete_btn.pack(side="left", padx=2)
+            delete_btn.pack(side="left", padx=1)
             
             # 设置列权重
             for i in range(len(data) + 1):
@@ -294,9 +373,20 @@ class MainWindow:
             if not file_path:
                 return
             
+            # 2. 选择附件存储路径
+            storage_path = filedialog.askdirectory(
+                title="选择附件存储路径",
+                initialdir=str(self.file_manager.base_storage_path.parent)
+            )
+            
+            if storage_path:
+                # 更新文件管理器的存储路径
+                self.file_manager.set_storage_path(storage_path)
+                self.update_status(f"存储路径已设置为: {storage_path}")
+            
             self.update_status("正在读取Excel文件...")
             
-            # 2. 选择工作表和配置列映射
+            # 3. 选择工作表和配置列映射
             from .sheet_selector_dialog import SheetSelectorDialog
             
             sheet_dialog = SheetSelectorDialog(self.root, file_path)
@@ -311,7 +401,7 @@ class MainWindow:
             
             self.update_status(f"正在导入工作表: {selected_sheet}...")
             
-            # 3. 导入数据，使用列映射
+            # 4. 导入数据，使用列映射
             self.update_status("正在处理数据...")
             self.root.update_idletasks()  # 立即更新界面
             
@@ -411,13 +501,15 @@ class MainWindow:
             difference_filter = self.difference_filter.get()
             attachment_filter = self.attachment_filter.get()
             contract_filter = self.contract_filter.get()
+            subject_filter = self.subject_filter.get()
             
             # 应用筛选
             self.filtered_records = self.data_processor.filter_records(
                 self.current_records,
                 difference_status=difference_filter if difference_filter != "全部" else None,
                 attachment_status=attachment_filter if attachment_filter != "全部" else None,
-                contract_status=contract_filter if contract_filter != "全部" else None
+                contract_status=contract_filter if contract_filter != "全部" else None,
+                subject_entity=subject_filter if subject_filter != "全部" else None
             )
             
             # 如果有搜索条件，再次应用搜索
@@ -427,17 +519,51 @@ class MainWindow:
                     self.filtered_records, search_text
                 )
             
+            # 重置到第一页
+            self.current_page = 1
             self.refresh_table()
             self.update_statistics()
             
         except Exception as e:
             self.logger.error(f"应用筛选失败: {e}")
+
+    def go_first_page(self):
+        """跳转到首页"""
+        self.current_page = 1
+        self.refresh_table()
+
+    def go_prev_page(self):
+        """上一页"""
+        if self.current_page > 1:
+            self.current_page -= 1
+            self.refresh_table()
+
+    def go_next_page(self):
+        """下一页"""
+        if self.current_page < self.total_pages:
+            self.current_page += 1
+            self.refresh_table()
+
+    def go_last_page(self):
+        """跳转到末页"""
+        self.current_page = self.total_pages
+        self.refresh_table()
+
+    def change_page_size(self, new_size):
+        """改变每页显示数量"""
+        try:
+            self.page_size = int(new_size)
+            self.current_page = 1  # 重置到第一页
+            self.refresh_table()
+        except ValueError:
+            pass
     
     def clear_filters(self):
         """清除所有筛选条件"""
         self.difference_filter.set("全部")
         self.attachment_filter.set("全部")
         self.contract_filter.set("全部")
+        self.subject_filter.set("全部")
         self.clear_search()
     
     def update_statistics(self):
@@ -533,9 +659,74 @@ class MainWindow:
             messagebox.showerror("错误", f"新增记录失败: {e}")
     
     def show_settings(self):
-        """显示设置窗口"""
-        # 占位符实现
-        messagebox.showinfo("提示", "设置功能即将推出")
+        """显示设置对话框"""
+        try:
+            settings_dialog = ctk.CTkToplevel(self.root)
+            settings_dialog.title("系统设置")
+            settings_dialog.geometry("500x400")
+            settings_dialog.transient(self.root)
+            settings_dialog.grab_set()
+            
+            # 主框架
+            main_frame = ctk.CTkFrame(settings_dialog)
+            main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+            
+            # 存储设置
+            storage_frame = ctk.CTkFrame(main_frame)
+            storage_frame.pack(fill="x", padx=5, pady=5)
+            
+            ctk.CTkLabel(storage_frame, text="存储设置", font=("微软雅黑", 14, "bold")).pack(anchor="w", padx=10, pady=5)
+            
+            # 当前存储路径
+            path_frame = ctk.CTkFrame(storage_frame)
+            path_frame.pack(fill="x", padx=10, pady=5)
+            
+            ctk.CTkLabel(path_frame, text="当前存储路径:").pack(anchor="w", padx=5)
+            current_path_label = ctk.CTkLabel(path_frame, text=str(self.file_manager.base_storage_path))
+            current_path_label.pack(anchor="w", padx=20, pady=2)
+            
+            # 更改存储路径按钮
+            def change_storage_path():
+                new_path = filedialog.askdirectory(
+                    title="选择新的存储路径",
+                    initialdir=str(self.file_manager.base_storage_path)
+                )
+                if new_path:
+                    if self.file_manager.set_storage_path(new_path):
+                        current_path_label.configure(text=new_path)
+                        messagebox.showinfo("成功", "存储路径已更新")
+                    else:
+                        messagebox.showerror("错误", "更新存储路径失败")
+            
+            ctk.CTkButton(path_frame, text="更改存储路径", command=change_storage_path).pack(anchor="w", padx=5, pady=5)
+            
+            # 存储信息
+            info_frame = ctk.CTkFrame(storage_frame)
+            info_frame.pack(fill="x", padx=10, pady=5)
+            
+            storage_info = self.file_manager.get_storage_info()
+            info_text = f"""存储统计信息:
+• 合同文件夹数量: {storage_info['contract_count']}
+• 附件文件数量: {storage_info['file_count']}
+• 总存储大小: {storage_info['total_size_mb']} MB"""
+            
+            ctk.CTkLabel(info_frame, text=info_text, justify="left").pack(anchor="w", padx=10, pady=10)
+            
+            # 关闭按钮
+            close_btn = ctk.CTkButton(main_frame, text="关闭", command=settings_dialog.destroy)
+            close_btn.pack(pady=10)
+            
+            # 居中显示
+            settings_dialog.update_idletasks()
+            width = settings_dialog.winfo_width()
+            height = settings_dialog.winfo_height()
+            x = (settings_dialog.winfo_screenwidth() // 2) - (width // 2)
+            y = (settings_dialog.winfo_screenheight() // 2) - (height // 2)
+            settings_dialog.geometry(f"{width}x{height}+{x}+{y}")
+            
+        except Exception as e:
+            self.logger.error(f"显示设置对话框失败: {e}")
+            messagebox.showerror("错误", f"显示设置对话框失败: {e}")
     
     def edit_record(self, record: IncomeRecord):
         """编辑记录"""
@@ -557,6 +748,26 @@ class MainWindow:
         except Exception as e:
             self.logger.error(f"编辑记录失败: {e}")
             messagebox.showerror("错误", f"编辑记录失败: {e}")
+
+    def manage_attachments(self, record: IncomeRecord):
+        """管理附件"""
+        try:
+            from .attachment_dialog import AttachmentDialog
+            
+            dialog = AttachmentDialog(self.root, record, self.file_manager)
+            result = dialog.show()
+            
+            if result:
+                # 更新数据库中的记录
+                if self.database.update_income_record(record.contract_id, record):
+                    self.load_data()  # 刷新界面
+                    self.update_status("附件更新成功")
+                else:
+                    messagebox.showerror("错误", "保存附件信息失败")
+            
+        except Exception as e:
+            self.logger.error(f"管理附件失败: {e}")
+            messagebox.showerror("错误", f"管理附件失败: {e}")
     
     def delete_record(self, record: IncomeRecord):
         """删除记录"""

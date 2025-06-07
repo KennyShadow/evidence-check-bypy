@@ -21,6 +21,7 @@ class DataProcessor:
                       difference_status: Optional[str] = None,
                       attachment_status: Optional[str] = None,
                       contract_status: Optional[str] = None,
+                      subject_entity: Optional[str] = None,
                       filters: Optional[Dict[str, Any]] = None) -> List[IncomeRecord]:
         """
         根据条件筛选记录 (支持两种调用方式)
@@ -30,6 +31,7 @@ class DataProcessor:
             difference_status: 差异状态筛选
             attachment_status: 附件状态筛选  
             contract_status: 合同状态筛选
+            subject_entity: 收入主体筛选
             filters: 筛选条件字典(备用方式)
             
         Returns:
@@ -85,6 +87,13 @@ class DataProcessor:
                         r for r in filtered_records 
                         if not r.is_new
                     ]
+            
+            # 收入主体筛选
+            if subject_entity and subject_entity != "全部":
+                filtered_records = [
+                    r for r in filtered_records 
+                    if r.subject_entity == subject_entity
+                ]
             
             return filtered_records
             
@@ -177,6 +186,115 @@ class DataProcessor:
         except Exception as e:
             self.logger.error(f"筛选记录失败: {e}")
             return records
+
+    def advanced_filter_records(self, records: List[IncomeRecord], 
+                               column_filters: Dict[str, Any]) -> List[IncomeRecord]:
+        """
+        高级筛选功能，类似Excel的筛选
+        
+        Args:
+            records: 记录列表
+            column_filters: 列筛选条件，格式：{"列名": {"values": [选中值列表], "exclude": False}}
+            
+        Returns:
+            筛选后的记录列表
+        """
+        try:
+            filtered_records = records.copy()
+            
+            for column, filter_config in column_filters.items():
+                if not filter_config.get("enabled", True):
+                    continue
+                
+                selected_values = filter_config.get("values", [])
+                exclude_mode = filter_config.get("exclude", False)
+                
+                if not selected_values:
+                    continue
+                
+                if column == "合同号":
+                    if exclude_mode:
+                        filtered_records = [r for r in filtered_records if r.contract_id not in selected_values]
+                    else:
+                        filtered_records = [r for r in filtered_records if r.contract_id in selected_values]
+                
+                elif column == "客户名":
+                    if exclude_mode:
+                        filtered_records = [r for r in filtered_records if r.client_name not in selected_values]
+                    else:
+                        filtered_records = [r for r in filtered_records if r.client_name in selected_values]
+                
+                elif column == "收入主体":
+                    if exclude_mode:
+                        filtered_records = [r for r in filtered_records if r.subject_entity not in selected_values]
+                    else:
+                        filtered_records = [r for r in filtered_records if r.subject_entity in selected_values]
+                
+                elif column == "差异状态":
+                    def get_difference_status(record):
+                        if record.difference is None:
+                            return "未确认"
+                        elif record.difference == 0:
+                            return "无差异"
+                        else:
+                            return "有差异"
+                    
+                    if exclude_mode:
+                        filtered_records = [r for r in filtered_records if get_difference_status(r) not in selected_values]
+                    else:
+                        filtered_records = [r for r in filtered_records if get_difference_status(r) in selected_values]
+                
+                elif column == "附件状态":
+                    def get_attachment_status(record):
+                        return "已关联附件" if record.attachment_count > 0 else "未关联附件"
+                    
+                    if exclude_mode:
+                        filtered_records = [r for r in filtered_records if get_attachment_status(r) not in selected_values]
+                    else:
+                        filtered_records = [r for r in filtered_records if get_attachment_status(r) in selected_values]
+            
+            return filtered_records
+            
+        except Exception as e:
+            self.logger.error(f"高级筛选失败: {e}")
+            return records
+
+    def get_unique_values(self, records: List[IncomeRecord], column: str) -> List[str]:
+        """
+        获取指定列的唯一值，用于筛选选项
+        
+        Args:
+            records: 记录列表
+            column: 列名
+            
+        Returns:
+            唯一值列表
+        """
+        try:
+            values = set()
+            
+            for record in records:
+                if column == "合同号":
+                    values.add(record.contract_id)
+                elif column == "客户名":
+                    values.add(record.client_name)
+                elif column == "收入主体":
+                    values.add(record.subject_entity or "")
+                elif column == "差异状态":
+                    if record.difference is None:
+                        values.add("未确认")
+                    elif record.difference == 0:
+                        values.add("无差异")
+                    else:
+                        values.add("有差异")
+                elif column == "附件状态":
+                    values.add("已关联附件" if record.attachment_count > 0 else "未关联附件")
+            
+            return sorted(list(values))
+            
+        except Exception as e:
+            self.logger.error(f"获取唯一值失败: {e}")
+            return []
     
     def get_statistics(self, records: List[IncomeRecord]) -> Dict[str, Any]:
         """

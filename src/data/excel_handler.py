@@ -139,6 +139,10 @@ class ExcelHandler:
                 # 附件收入映射
                 elif any(keyword in col_lower for keyword in ['附件确认的收入', '附件收入', '证明收入']):
                     column_mapping[col] = '附件确认的收入'
+                
+                # 收入主体映射
+                elif any(keyword in col_lower for keyword in ['收入主体', '主体', '实体', '单位', 'entity', 'subject']):
+                    column_mapping[col] = '收入主体'
             
             # 应用映射
             if column_mapping:
@@ -212,10 +216,28 @@ class ExcelHandler:
                         error_rows.append(f"第{index+2}行: 本年确认的收入格式错误")
                         continue
                     
+                    # 获取收入主体
+                    subject_entity_raw = row.get("收入主体", "")
+                    if pd.isna(subject_entity_raw) or subject_entity_raw is None:
+                        subject_entity = ""
+                    else:
+                        subject_entity = str(subject_entity_raw).strip()
+                    
+                    # 获取附件确认的收入
+                    attachment_income = row.get("附件确认的收入")
+                    attachment_confirmed_income = None
+                    if attachment_income is not None and not pd.isna(attachment_income):
+                        try:
+                            attachment_confirmed_income = Decimal(str(attachment_income))
+                        except (ValueError, TypeError):
+                            pass  # 附件收入不是必需字段，忽略转换错误
+                    
                     record = IncomeRecord(
                         contract_id=contract_id,
                         client_name=client_name,
                         annual_confirmed_income=annual_income,
+                        subject_entity=subject_entity,
+                        attachment_confirmed_income=attachment_confirmed_income,
                         import_time=datetime.now()
                     )
                     

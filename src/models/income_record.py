@@ -16,6 +16,7 @@ class IncomeRecord:
     contract_id: str  # 合同号
     client_name: str  # 客户名
     annual_confirmed_income: Decimal  # 本年确认的收入
+    subject_entity: str = ""  # 收入所属主体
     
     # 可选字段
     attachment_confirmed_income: Optional[Decimal] = None  # 附件确认的收入
@@ -72,6 +73,7 @@ class IncomeRecord:
         return {
             "合同号": self.contract_id,
             "客户名": self.client_name,
+            "收入主体": self.subject_entity,
             "本年确认的收入": float(self.annual_confirmed_income),
             "附件确认的收入": float(self.attachment_confirmed_income) if self.attachment_confirmed_income else None,
             "差异": float(self.difference) if self.difference else None,
@@ -100,6 +102,9 @@ class IncomeRecord:
         """从字典更新数据"""
         if "客户名" in data:
             self.client_name = data["客户名"]
+        
+        if "收入主体" in data:
+            self.subject_entity = data["收入主体"] or ""
         
         if "本年确认的收入" in data and data["本年确认的收入"] is not None:
             self.annual_confirmed_income = Decimal(str(data["本年确认的收入"]))

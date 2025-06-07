@@ -1373,3 +1373,24 @@
 2025-06-07 10:57:22,237 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
 2025-06-07 10:57:31,155 - src.models.database - INFO - 成功保存数据库，共3501条记录
 2025-06-07 10:57:31,156 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:09:51,976 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:09:54,445 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:09:54,446 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:09:57,832 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:09:57,832 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:09:57,833 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:10:40,772 - src.data.file_manager - INFO - 成功保存附件: 22SZ001（产值框架）\0c22f9560773695b955c.pdf
+2025-06-07 13:10:40,773 - src.gui.attachment_dialog - INFO - 成功添加附件: D:/系统文件夹/桌面/0c22f9560773695b955c.pdf
+2025-06-07 13:10:46,973 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:10:46,974 - src.models.database - INFO - 更新收入记录: 22SZ001（产值框架）
+2025-06-07 13:10:51,255 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:11:09,221 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:11:09,221 - src.models.database - INFO - 更新收入记录: 22SZ001（产值框架）
+2025-06-07 13:11:13,372 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:11:32,112 - src.data.excel_handler - INFO - 成功导出3501条记录到: D:\系统文件夹\桌面\test.xlsx
+2025-06-07 13:13:10,995 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\7-新致-销售合同及收入确认情况审查-3-29备份.xlsx, 共203行数据
+2025-06-07 13:13:19,530 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\7-新致-销售合同及收入确认情况审查-3-29备份.xlsx, 共3517行数据
+2025-06-07 13:13:23,064 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\7-新致-销售合同及收入确认情况审查-3-29备份.xlsx, 共3517行数据
+2025-06-07 13:13:28,730 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\7-新致-销售合同及收入确认情况审查-3-29备份.xlsx, 共3532行数据
+2025-06-07 13:14:23,244 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:14:23,244 - src.gui.main_window - INFO - 程序正常退出
