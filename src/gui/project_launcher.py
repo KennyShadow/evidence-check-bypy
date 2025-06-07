@@ -10,7 +10,7 @@ from typing import Optional, Dict
 from pathlib import Path
 
 from ..data.project_manager import ProjectManager
-from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME
+from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME, get_font
 from .project_dialog import NewProjectDialog
 
 
@@ -93,7 +93,7 @@ class ProjectLauncher:
         title_label = ctk.CTkLabel(
             header_frame, 
             text=APP_NAME, 
-            font=("微软雅黑", 24, "bold")
+            font=get_font("title_large")
         )
         title_label.pack(pady=(20, 5))
         
@@ -101,7 +101,7 @@ class ProjectLauncher:
         subtitle_label = ctk.CTkLabel(
             header_frame,
             text="请选择一个项目开始工作，或创建新项目",
-            font=("微软雅黑", 14),
+            font=get_font("heading"),
             text_color="gray"
         )
         subtitle_label.pack(pady=(0, 5))
@@ -110,7 +110,7 @@ class ProjectLauncher:
         shortcut_label = ctk.CTkLabel(
             header_frame,
             text="快捷键：回车键打开项目，ESC键退出",
-            font=("微软雅黑", 11),
+            font=get_font("body"),
             text_color="gray"
         )
         shortcut_label.pack(pady=(0, 15))
@@ -124,7 +124,7 @@ class ProjectLauncher:
         list_title = ctk.CTkLabel(
             list_frame,
             text="现有项目",
-            font=("微软雅黑", 16, "bold")
+            font=get_font("subtitle")
         )
         list_title.pack(pady=(15, 10))
         
@@ -148,7 +148,7 @@ class ProjectLauncher:
             command=self.new_project,
             width=120,
             height=40,
-            font=("微软雅黑", 12, "bold")
+            font=get_font("button")
         )
         new_project_btn.pack(side="left", padx=(0, 15))
         
@@ -159,7 +159,7 @@ class ProjectLauncher:
             command=self.open_project,
             width=120,
             height=40,
-            font=("微软雅黑", 12, "bold"),
+            font=get_font("button"),
             state="disabled"
         )
         self.open_project_btn.pack(side="left", padx=(0, 15))
@@ -171,7 +171,7 @@ class ProjectLauncher:
             command=self.delete_project,
             width=120,
             height=40,
-            font=("微软雅黑", 12),
+            font=get_font("button"),
             fg_color="red",
             hover_color="darkred",
             state="disabled"
@@ -194,14 +194,14 @@ class ProjectLauncher:
             ctk.CTkLabel(
                 no_project_frame,
                 text="暂无项目",
-                font=("微软雅黑", 14),
+                font=get_font("heading"),
                 text_color="gray"
             ).pack(pady=20)
             
             ctk.CTkLabel(
                 no_project_frame,
                 text="点击\"新建项目\"按钮创建您的第一个项目",
-                font=("微软雅黑", 12),
+                font=get_font("body_large"),
                 text_color="gray"
             ).pack(pady=(0, 20))
         else:
@@ -239,7 +239,7 @@ class ProjectLauncher:
         name_label = ctk.CTkLabel(
             info_frame,
             text=project["name"],
-            font=("微软雅黑", 14, "bold"),
+            font=get_font("heading"),
             anchor="w"
         )
         name_label.pack(anchor="w", padx=10, pady=(10, 2))
@@ -249,7 +249,7 @@ class ProjectLauncher:
         desc_label = ctk.CTkLabel(
             info_frame,
             text=desc_text,
-            font=("微软雅黑", 11),
+            font=get_font("body"),
             text_color="gray",
             anchor="w"
         )
@@ -260,7 +260,7 @@ class ProjectLauncher:
         stats_label = ctk.CTkLabel(
             info_frame,
             text=stats_text,
-            font=("微软雅黑", 10),
+            font=get_font("body_small"),
             text_color="gray",
             anchor="w"
         )
@@ -271,7 +271,7 @@ class ProjectLauncher:
             current_label = ctk.CTkLabel(
                 project_frame,
                 text="当前",
-                font=("微软雅黑", 10, "bold"),
+                font=get_font("body_small"),
                 text_color="green",
                 width=50
             )

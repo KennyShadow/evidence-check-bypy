@@ -10,6 +10,7 @@ from typing import Optional, List, Tuple, Dict
 from pathlib import Path
 
 from ..data.excel_handler import ExcelHandler
+from ..config import get_font
 
 
 class SheetSelectorDialog:
@@ -85,7 +86,7 @@ class SheetSelectorDialog:
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # 标题
-        title_label = ctk.CTkLabel(main_frame, text="Excel导入设置", font=("微软雅黑", 16, "bold"))
+        title_label = ctk.CTkLabel(main_frame, text="Excel导入设置", font=get_font("subtitle"))
         title_label.pack(pady=(0, 20))
         
         # 文件信息
@@ -97,7 +98,7 @@ class SheetSelectorDialog:
         step1_frame = ctk.CTkFrame(main_frame)
         step1_frame.pack(fill="x", padx=10, pady=(0, 20))
         
-        step1_title = ctk.CTkLabel(step1_frame, text="第一步：选择工作表", font=("微软雅黑", 14, "bold"))
+        step1_title = ctk.CTkLabel(step1_frame, text="第一步：选择工作表", font=get_font("heading"))
         step1_title.pack(pady=10)
         
         select_frame = ctk.CTkFrame(step1_frame)
@@ -121,10 +122,10 @@ class SheetSelectorDialog:
         step2_frame = ctk.CTkFrame(main_frame)
         step2_frame.pack(fill="x", padx=10, pady=(0, 20))
         
-        step2_title = ctk.CTkLabel(step2_frame, text="第二步：配置列映射", font=("微软雅黑", 14, "bold"))
+        step2_title = ctk.CTkLabel(step2_frame, text="第二步：配置列映射", font=get_font("heading"))
         step2_title.pack(pady=10)
         
-        mapping_instruction = ctk.CTkLabel(step2_frame, text="请为每个必需字段选择对应的Excel列：", font=("微软雅黑", 12))
+        mapping_instruction = ctk.CTkLabel(step2_frame, text="请为每个必需字段选择对应的Excel列：", font=get_font("body_large"))
         mapping_instruction.pack(pady=(0, 10))
         
         # 列映射控件
@@ -162,7 +163,7 @@ class SheetSelectorDialog:
         step3_frame = ctk.CTkFrame(main_frame)
         step3_frame.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         
-        step3_title = ctk.CTkLabel(step3_frame, text="第三步：数据预览", font=("微软雅黑", 14, "bold"))
+        step3_title = ctk.CTkLabel(step3_frame, text="第三步：数据预览", font=get_font("heading"))
         step3_title.pack(pady=10)
         
         # 预览文本框
@@ -184,7 +185,7 @@ class SheetSelectorDialog:
             command=self.cancel,
             width=120,
             height=40,
-            font=("微软雅黑", 14),
+            font=get_font("heading"),
             fg_color="gray50",
             hover_color="gray40"
         )
@@ -197,7 +198,7 @@ class SheetSelectorDialog:
             command=self.import_sheet,
             width=140,
             height=40,
-            font=("微软雅黑", 14, "bold"),
+            font=get_font("heading"),
             fg_color="#2b8a3e",
             hover_color="#1c5f2e"
         )

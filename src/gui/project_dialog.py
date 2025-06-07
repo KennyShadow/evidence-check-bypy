@@ -12,6 +12,7 @@ from typing import List, Optional, Dict
 from pathlib import Path
 
 from ..data.project_manager import ProjectManager
+from ..config import get_font
 
 
 class NewProjectDialog:
@@ -44,7 +45,7 @@ class NewProjectDialog:
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # 标题
-        title_label = ctk.CTkLabel(main_frame, text="创建新项目", font=("微软雅黑", 18, "bold"))
+        title_label = ctk.CTkLabel(main_frame, text="创建新项目", font=get_font("title"))
         title_label.pack(pady=(0, 20))
         
         # 项目信息表单
@@ -68,28 +69,28 @@ class NewProjectDialog:
         name_frame = ctk.CTkFrame(form_frame)
         name_frame.pack(fill="x", padx=20, pady=10)
         
-        ctk.CTkLabel(name_frame, text="项目名称 *", font=("微软雅黑", 12, "bold")).pack(anchor="w")
-        self.name_entry = ctk.CTkEntry(name_frame, placeholder_text="请输入项目名称", font=("微软雅黑", 11))
+        ctk.CTkLabel(name_frame, text="项目名称 *", font=get_font("body_large")).pack(anchor="w")
+        self.name_entry = ctk.CTkEntry(name_frame, placeholder_text="请输入项目名称", font=get_font("body"))
         self.name_entry.pack(fill="x", pady=(5, 0))
         
         # 项目描述
         desc_frame = ctk.CTkFrame(form_frame)
         desc_frame.pack(fill="x", padx=20, pady=10)
         
-        ctk.CTkLabel(desc_frame, text="项目描述", font=("微软雅黑", 12, "bold")).pack(anchor="w")
-        self.desc_entry = ctk.CTkTextbox(desc_frame, height=80, font=("微软雅黑", 11))
+        ctk.CTkLabel(desc_frame, text="项目描述", font=get_font("body_large")).pack(anchor="w")
+        self.desc_entry = ctk.CTkTextbox(desc_frame, height=80, font=get_font("body"))
         self.desc_entry.pack(fill="x", pady=(5, 0))
         
         # 存储路径
         storage_frame = ctk.CTkFrame(form_frame)
         storage_frame.pack(fill="x", padx=20, pady=10)
         
-        ctk.CTkLabel(storage_frame, text="附件存储路径", font=("微软雅黑", 12, "bold")).pack(anchor="w")
+        ctk.CTkLabel(storage_frame, text="附件存储路径", font=get_font("body_large")).pack(anchor="w")
         
         path_input_frame = ctk.CTkFrame(storage_frame)
         path_input_frame.pack(fill="x", pady=(5, 0))
         
-        self.storage_path_entry = ctk.CTkEntry(path_input_frame, placeholder_text="可选，留空则使用默认路径", font=("微软雅黑", 11))
+        self.storage_path_entry = ctk.CTkEntry(path_input_frame, placeholder_text="可选，留空则使用默认路径", font=get_font("body"))
         self.storage_path_entry.pack(side="left", fill="x", expand=True, padx=(0, 5))
         
         browse_btn = ctk.CTkButton(path_input_frame, text="浏览", command=self.browse_storage_path, width=60)
@@ -104,7 +105,7 @@ class NewProjectDialog:
 • 附件存储路径可以指定外部目录，便于文件管理
 • 每个项目拥有独立的数据库和附件存储空间"""
         
-        tip_label = ctk.CTkLabel(tip_frame, text=tip_text, font=("微软雅黑", 10), justify="left")
+        tip_label = ctk.CTkLabel(tip_frame, text=tip_text, font=get_font("body_small"), justify="left")
         tip_label.pack(anchor="w", padx=10, pady=10)
     
     def create_buttons(self, parent):
@@ -244,7 +245,7 @@ class ProjectListDialog:
         toolbar_frame = ctk.CTkFrame(parent)
         toolbar_frame.pack(fill="x", padx=5, pady=5)
         
-        ctk.CTkLabel(toolbar_frame, text="项目列表", font=("微软雅黑", 16, "bold")).pack(side="left", padx=10)
+        ctk.CTkLabel(toolbar_frame, text="项目列表", font=get_font("subtitle")).pack(side="left", padx=10)
         
         # 操作按钮
         btn_frame = ctk.CTkFrame(toolbar_frame)

@@ -17,7 +17,7 @@ from ..data.excel_handler import ExcelHandler
 from ..data.data_processor import DataProcessor
 from ..data.file_manager import FileManager
 from ..data.project_manager import ProjectManager
-from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME
+from ..config import WINDOW_CONFIG, THEME_CONFIG, APP_NAME, get_font
 
 
 class MainWindow:
@@ -116,7 +116,7 @@ class MainWindow:
         file_frame = ctk.CTkFrame(toolbar_frame)
         file_frame.pack(side="left", padx=5)
         
-        ctk.CTkLabel(file_frame, text="文件操作:", font=("微软雅黑", 12, "bold")).pack(side="left", padx=5)
+        ctk.CTkLabel(file_frame, text="文件操作:", font=get_font("body_large")).pack(side="left", padx=5)
         ctk.CTkButton(file_frame, text="导入Excel", command=self.import_excel, width=100).pack(side="left", padx=2)
         ctk.CTkButton(file_frame, text="导出数据", command=self.export_data, width=100).pack(side="left", padx=2)
         
@@ -124,14 +124,14 @@ class MainWindow:
         project_frame = ctk.CTkFrame(toolbar_frame)
         project_frame.pack(side="left", padx=10)
         
-        ctk.CTkLabel(project_frame, text="项目操作:", font=("微软雅黑", 12, "bold")).pack(side="left", padx=5)
+        ctk.CTkLabel(project_frame, text="项目操作:", font=get_font("body_large")).pack(side="left", padx=5)
         ctk.CTkButton(project_frame, text="切换项目", command=self.switch_project, width=100).pack(side="left", padx=2)
         
         # 数据操作
         data_frame = ctk.CTkFrame(toolbar_frame)
         data_frame.pack(side="left", padx=10)
         
-        ctk.CTkLabel(data_frame, text="数据操作:", font=("微软雅黑", 12, "bold")).pack(side="left", padx=5)
+        ctk.CTkLabel(data_frame, text="数据操作:", font=get_font("body_large")).pack(side="left", padx=5)
         ctk.CTkButton(data_frame, text="新增记录", command=self.add_record, width=100).pack(side="left", padx=2)
         ctk.CTkButton(data_frame, text="统计分析", command=self.show_statistics, width=100).pack(side="left", padx=2)
         ctk.CTkButton(data_frame, text="设置", command=self.show_settings, width=100).pack(side="left", padx=2)
@@ -151,13 +151,13 @@ class MainWindow:
         filter_frame = ctk.CTkFrame(parent)
         filter_frame.pack(side="left", fill="y", padx=(0, 5))
         
-        ctk.CTkLabel(filter_frame, text="数据筛选", font=("微软雅黑", 14, "bold")).pack(pady=10)
+        ctk.CTkLabel(filter_frame, text="数据筛选", font=get_font("heading")).pack(pady=10)
         
         # 列搜索状态显示
         search_status_frame = ctk.CTkFrame(filter_frame)
         search_status_frame.pack(fill="x", padx=10, pady=5)
         
-        ctk.CTkLabel(search_status_frame, text="列搜索状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(search_status_frame, text="列搜索状态:", font=get_font("body")).pack(anchor="w", padx=5)
         self.search_status_label = ctk.CTkLabel(search_status_frame, text="未设置搜索条件", text_color="gray")
         self.search_status_label.pack(anchor="w", padx=5, pady=2)
         
@@ -168,7 +168,7 @@ class MainWindow:
         # 差异状态筛选
         diff_frame = ctk.CTkFrame(filter_frame)
         diff_frame.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(diff_frame, text="差异状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(diff_frame, text="差异状态:", font=get_font("body")).pack(anchor="w", padx=5)
         self.difference_filter_btn = ctk.CTkButton(
             diff_frame, text="点击筛选", command=lambda: self.show_multi_filter("difference"), 
             width=120, height=28
@@ -178,7 +178,7 @@ class MainWindow:
         # 附件状态筛选
         att_frame = ctk.CTkFrame(filter_frame)
         att_frame.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(att_frame, text="附件状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(att_frame, text="附件状态:", font=get_font("body")).pack(anchor="w", padx=5)
         self.attachment_filter_btn = ctk.CTkButton(
             att_frame, text="点击筛选", command=lambda: self.show_multi_filter("attachment"),
             width=120, height=28
@@ -188,7 +188,7 @@ class MainWindow:
         # 合同状态筛选
         contract_frame = ctk.CTkFrame(filter_frame)
         contract_frame.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(contract_frame, text="合同状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(contract_frame, text="合同状态:", font=get_font("body")).pack(anchor="w", padx=5)
         self.contract_filter_btn = ctk.CTkButton(
             contract_frame, text="点击筛选", command=lambda: self.show_multi_filter("contract"),
             width=120, height=28
@@ -198,7 +198,7 @@ class MainWindow:
         # 收入主体筛选
         subject_frame = ctk.CTkFrame(filter_frame)
         subject_frame.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(subject_frame, text="收入主体:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(subject_frame, text="收入主体:", font=get_font("body")).pack(anchor="w", padx=5)
         self.subject_filter_btn = ctk.CTkButton(
             subject_frame, text="点击筛选", command=lambda: self.show_multi_filter("subject"),
             width=120, height=28
@@ -208,7 +208,7 @@ class MainWindow:
         # 客户筛选
         client_frame = ctk.CTkFrame(filter_frame)
         client_frame.pack(fill="x", padx=10, pady=5)
-        ctk.CTkLabel(client_frame, text="客户名称:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        ctk.CTkLabel(client_frame, text="客户名称:", font=get_font("body")).pack(anchor="w", padx=5)
         self.client_filter_btn = ctk.CTkButton(
             client_frame, text="点击筛选", command=lambda: self.show_multi_filter("client"),
             width=120, height=28
@@ -221,7 +221,7 @@ class MainWindow:
         self.stats_frame = ctk.CTkFrame(filter_frame)
         self.stats_frame.pack(fill="x", padx=10, pady=10)
         
-        ctk.CTkLabel(self.stats_frame, text="统计信息", font=("微软雅黑", 12, "bold")).pack(pady=5)
+        ctk.CTkLabel(self.stats_frame, text="统计信息", font=get_font("body_large")).pack(pady=5)
         self.stats_label = ctk.CTkLabel(self.stats_frame, text="暂无数据", justify="left")
         self.stats_label.pack(pady=5, padx=5)
     
@@ -234,7 +234,7 @@ class MainWindow:
         title_frame = ctk.CTkFrame(table_frame)
         title_frame.pack(fill="x", padx=5, pady=5)
         
-        ctk.CTkLabel(title_frame, text="收入数据表", font=("微软雅黑", 16, "bold")).pack(side="left")
+        ctk.CTkLabel(title_frame, text="收入数据表", font=get_font("subtitle")).pack(side="left")
         self.count_label = ctk.CTkLabel(title_frame, text="共0条记录")
         self.count_label.pack(side="right")
         
@@ -464,7 +464,7 @@ class MainWindow:
                     header_btn = ctk.CTkButton(
                         header_frame, 
                         text=f"🔍 {header_text}", 
-                        font=("微软雅黑", 11, "bold"),
+                        font=get_font("body"),
                         command=lambda col=header_text: self.show_column_search(col),
                         width=width,
                         height=30
@@ -472,7 +472,7 @@ class MainWindow:
                     header_btn.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
                 else:
                     # 操作列不可点击
-                    label = ctk.CTkLabel(header_frame, text=header_text, font=("微软雅黑", 12, "bold"), width=width)
+                    label = ctk.CTkLabel(header_frame, text=header_text, font=get_font("table_header"), width=width)
                     label.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
             
             # 设置列的固定宽度
@@ -484,7 +484,7 @@ class MainWindow:
                 info_frame = ctk.CTkFrame(self.table_content_frame)
                 info_frame.pack(fill="x", padx=2, pady=2)
                 info_text = f"显示第{start_idx + 1}-{end_idx}条记录"
-                info_label = ctk.CTkLabel(info_frame, text=info_text, font=("微软雅黑", 10))
+                info_label = ctk.CTkLabel(info_frame, text=info_text, font=get_font("body_small"))
                 info_label.pack(pady=5)
             
             # 添加数据行
@@ -535,7 +535,7 @@ class MainWindow:
                     text=text, 
                     width=width,
                     anchor="w",  # 左对齐
-                    font=("微软雅黑", 10)
+                    font=get_font("table_body")
                 )
                 label.grid(row=0, column=i, padx=1, pady=2, sticky="ew")
             
@@ -547,17 +547,17 @@ class MainWindow:
             # 使用更紧凑的按钮布局
             edit_btn = ctk.CTkButton(action_frame, text="编辑", width=40, height=24,
                                    command=lambda r=record: self.edit_record(r),
-                                   font=("微软雅黑", 9))
+                                   font=get_font("caption"))
             edit_btn.grid(row=0, column=0, padx=1, pady=1)
             
             attachment_btn = ctk.CTkButton(action_frame, text="附件", width=40, height=24,
                                          command=lambda r=record: self.manage_attachments(r),
-                                         font=("微软雅黑", 9))
+                                         font=get_font("caption"))
             attachment_btn.grid(row=0, column=1, padx=1, pady=1)
             
             delete_btn = ctk.CTkButton(action_frame, text="删除", width=40, height=24,
                                      command=lambda r=record: self.delete_record(r),
-                                     font=("微软雅黑", 9),
+                                     font=get_font("caption"),
                                      fg_color="red", hover_color="darkred")
             delete_btn.grid(row=0, column=2, padx=1, pady=1)
             
@@ -1138,7 +1138,7 @@ class MainWindow:
             project_frame = ctk.CTkFrame(main_frame)
             project_frame.pack(fill="x", padx=5, pady=5)
             
-            ctk.CTkLabel(project_frame, text="项目管理", font=("微软雅黑", 14, "bold")).pack(anchor="w", padx=10, pady=5)
+            ctk.CTkLabel(project_frame, text="项目管理", font=get_font("heading")).pack(anchor="w", padx=10, pady=5)
             
             # 当前项目信息
             current_project_frame = ctk.CTkFrame(project_frame)
@@ -1186,7 +1186,7 @@ class MainWindow:
             storage_frame = ctk.CTkFrame(main_frame)
             storage_frame.pack(fill="x", padx=5, pady=5)
             
-            ctk.CTkLabel(storage_frame, text="存储设置", font=("微软雅黑", 14, "bold")).pack(anchor="w", padx=10, pady=5)
+            ctk.CTkLabel(storage_frame, text="存储设置", font=get_font("heading")).pack(anchor="w", padx=10, pady=5)
             
             # 当前存储路径
             path_frame = ctk.CTkFrame(storage_frame)

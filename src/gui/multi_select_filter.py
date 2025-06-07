@@ -5,6 +5,7 @@
 
 import logging
 import customtkinter as ctk
+from ..config import get_font
 from tkinter import messagebox
 from tkinter import ttk
 import tkinter as tk
@@ -57,7 +58,7 @@ class MultiSelectFilterDialog:
         header_frame = ctk.CTkFrame(parent)
         header_frame.pack(fill="x", padx=5, pady=5)
         
-        title_label = ctk.CTkLabel(header_frame, text=f"选择要显示的{self.title}", font=("微软雅黑", 14, "bold"))
+        title_label = ctk.CTkLabel(header_frame, text=f"选择要显示的{self.title}", font=get_font("heading"))
         title_label.pack(pady=10)
     
     def create_search(self, parent):

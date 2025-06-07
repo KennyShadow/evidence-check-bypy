@@ -16,6 +16,7 @@ import platform
 
 from ..models.income_record import IncomeRecord
 from ..data.file_manager import FileManager
+from ..config import get_font
 
 
 class AttachmentDialog:
@@ -68,7 +69,7 @@ class AttachmentDialog:
         info_frame = ctk.CTkFrame(parent)
         info_frame.pack(fill="x", padx=5, pady=5)
         
-        ctk.CTkLabel(info_frame, text="合同信息", font=("微软雅黑", 14, "bold")).pack(anchor="w", padx=10, pady=5)
+        ctk.CTkLabel(info_frame, text="合同信息", font=get_font("heading")).pack(anchor="w", padx=10, pady=5)
         
         # 合同详细信息
         details_frame = ctk.CTkFrame(info_frame)
@@ -93,7 +94,7 @@ class AttachmentDialog:
         title_frame = ctk.CTkFrame(list_frame)
         title_frame.pack(fill="x", padx=5, pady=5)
         
-        ctk.CTkLabel(title_frame, text="附件列表", font=("微软雅黑", 14, "bold")).pack(side="left", padx=10)
+        ctk.CTkLabel(title_frame, text="附件列表", font=get_font("heading")).pack(side="left", padx=10)
         
         # 添加按钮
         add_btn = ctk.CTkButton(
@@ -102,7 +103,7 @@ class AttachmentDialog:
             command=self.add_attachment, 
             width=140, 
             height=35,
-            font=("微软雅黑", 12, "bold"),
+            font=get_font("body_large"),
             fg_color="#1E90FF",
             hover_color="#4169E1"
         )
@@ -188,7 +189,7 @@ class AttachmentDialog:
             command=self.load_attachments, 
             width=120, 
             height=35,
-            font=("微软雅黑", 12)
+            font=get_font("body_large")
         )
         refresh_btn.pack(side="left", padx=5)
         
@@ -198,7 +199,7 @@ class AttachmentDialog:
             command=self.open_contract_folder, 
             width=140, 
             height=35,
-            font=("微软雅黑", 12)
+            font=get_font("body_large")
         )
         open_folder_btn.pack(side="left", padx=5)
         
@@ -212,7 +213,7 @@ class AttachmentDialog:
             command=self.open_selected_attachment,
             width=120,
             height=35,
-            font=("微软雅黑", 12),
+            font=get_font("body_large"),
             fg_color="#2B8C2B",
             hover_color="#228B22"
         )
@@ -224,7 +225,7 @@ class AttachmentDialog:
             command=self.rename_attachment,
             width=120,
             height=35,
-            font=("微软雅黑", 12),
+            font=get_font("body_large"),
             fg_color="#FF8C00",
             hover_color="#FF7F00"
         )
@@ -236,7 +237,7 @@ class AttachmentDialog:
             command=self.delete_selected_attachment,
             width=120,
             height=35,
-            font=("微软雅黑", 12),
+            font=get_font("body_large"),
             fg_color="#DC143C",
             hover_color="#B22222"
         )
@@ -252,7 +253,7 @@ class AttachmentDialog:
             command=self.cancel, 
             width=120, 
             height=35,
-            font=("微软雅黑", 12),
+            font=get_font("body_large"),
             fg_color="gray",
             hover_color="darkgray"
         )
@@ -264,7 +265,7 @@ class AttachmentDialog:
             command=self.save_and_close, 
             width=120, 
             height=35,
-            font=("微软雅黑", 12),
+            font=get_font("body_large"),
             fg_color="#2B8C2B",
             hover_color="#228B22"
         )

@@ -5,6 +5,7 @@
 
 import logging
 import customtkinter as ctk
+from ..config import get_font
 from tkinter import messagebox
 from typing import List, Optional, Callable
 
@@ -57,10 +58,10 @@ class ColumnSearchDialog:
         header_frame = ctk.CTkFrame(parent)
         header_frame.pack(fill="x", padx=5, pady=5)
         
-        title_label = ctk.CTkLabel(header_frame, text=f"在「{self.column_name}」列中搜索", font=("微软雅黑", 14, "bold"))
+        title_label = ctk.CTkLabel(header_frame, text=f"在「{self.column_name}」列中搜索", font=get_font("heading"))
         title_label.pack(pady=10)
         
-        desc_label = ctk.CTkLabel(header_frame, text="输入关键词搜索该列的内容", font=("微软雅黑", 11), text_color="gray")
+        desc_label = ctk.CTkLabel(header_frame, text="输入关键词搜索该列的内容", font=get_font("body"), text_color="gray")
         desc_label.pack(pady=(0, 10))
     
     def create_search_input(self, parent):
@@ -68,7 +69,7 @@ class ColumnSearchDialog:
         search_frame = ctk.CTkFrame(parent)
         search_frame.pack(fill="x", padx=5, pady=5)
         
-        ctk.CTkLabel(search_frame, text="搜索关键词:", font=("微软雅黑", 12)).pack(anchor="w", padx=10, pady=(10, 5))
+        ctk.CTkLabel(search_frame, text="搜索关键词:", font=get_font("body_large")).pack(anchor="w", padx=10, pady=(10, 5))
         
         self.search_entry = ctk.CTkEntry(search_frame, placeholder_text=f"输入要搜索的{self.column_name}...")
         self.search_entry.pack(fill="x", padx=10, pady=(0, 10))
@@ -81,7 +82,7 @@ class ColumnSearchDialog:
         mode_frame = ctk.CTkFrame(search_frame)
         mode_frame.pack(fill="x", padx=10, pady=(0, 10))
         
-        ctk.CTkLabel(mode_frame, text="搜索模式:", font=("微软雅黑", 11)).pack(anchor="w", padx=5, pady=(5, 2))
+        ctk.CTkLabel(mode_frame, text="搜索模式:", font=get_font("body")).pack(anchor="w", padx=5, pady=(5, 2))
         
         self.search_mode = ctk.StringVar(value="包含")
         mode_radio_frame = ctk.CTkFrame(mode_frame)
@@ -99,7 +100,7 @@ class ColumnSearchDialog:
         suggest_frame = ctk.CTkFrame(parent)
         suggest_frame.pack(fill="both", expand=True, padx=5, pady=5)
         
-        ctk.CTkLabel(suggest_frame, text="常见值（点击快速填入）:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=10, pady=(10, 5))
+        ctk.CTkLabel(suggest_frame, text="常见值（点击快速填入）:", font=get_font("body")).pack(anchor="w", padx=10, pady=(10, 5))
         
         # 滚动区域显示建议值
         self.suggestions_scroll = ctk.CTkScrollableFrame(suggest_frame, height=120)
@@ -114,7 +115,7 @@ class ColumnSearchDialog:
                     text=value[:50] + "..." if len(value) > 50 else value,
                     command=lambda v=value: self.fill_search_text(v),
                     height=25,
-                    font=("微软雅黑", 10)
+                    font=get_font("body_small")
                 )
                 value_btn.pack(fill="x", pady=1)
     

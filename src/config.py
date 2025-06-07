@@ -41,6 +41,28 @@ THEME_CONFIG = {
     "scaling": 1.0
 }
 
+# 字体配置 - 使用现代无衬线字体
+FONT_CONFIG = {
+    # 主要字体家族 (按优先级排序)
+    "font_family": "Segoe UI",  # Windows 11默认字体
+    "font_fallbacks": ["SF Pro Display", "Helvetica Neue", "Arial", "PingFang SC", "Noto Sans CJK SC", "微软雅黑"],
+    
+    # 不同大小的字体配置
+    "fonts": {
+        "title_large": ("Segoe UI", 24, "bold"),      # 大标题
+        "title": ("Segoe UI", 18, "bold"),            # 标题
+        "subtitle": ("Segoe UI", 16, "bold"),         # 子标题
+        "heading": ("Segoe UI", 14, "bold"),          # 小标题
+        "body_large": ("Segoe UI", 12),               # 大正文
+        "body": ("Segoe UI", 11),                     # 正文
+        "body_small": ("Segoe UI", 10),               # 小正文
+        "caption": ("Segoe UI", 9),                   # 说明文字
+        "button": ("Segoe UI", 11),                   # 按钮文字
+        "table_header": ("Segoe UI", 12, "bold"),     # 表格标题
+        "table_body": ("Segoe UI", 10),               # 表格内容
+    }
+}
+
 # 表格列配置
 TABLE_COLUMNS = {
     "合同号": {"width": 120, "required": True},
@@ -95,4 +117,21 @@ LOGGING_CONFIG = {
     "file": DATA_DIR / "app.log",
     "max_size": 10 * 1024 * 1024,  # 10MB
     "backup_count": 5
-} 
+}
+
+# 字体工具函数
+def get_font(font_type: str = "body") -> tuple:
+    """
+    获取指定类型的字体配置
+    
+    Args:
+        font_type: 字体类型 (title_large, title, subtitle, heading, body_large, body, body_small, caption, button, table_header, table_body)
+    
+    Returns:
+        字体元组 (字体名称, 大小, 样式)
+    """
+    return FONT_CONFIG["fonts"].get(font_type, FONT_CONFIG["fonts"]["body"])
+
+def get_font_family() -> str:
+    """获取主要字体家族名称"""
+    return FONT_CONFIG["font_family"] 

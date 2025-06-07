@@ -9,6 +9,7 @@ from typing import Optional
 from decimal import Decimal, InvalidOperation
 
 from ..models.income_record import IncomeRecord
+from ..config import get_font
 
 
 class RecordEditDialog:
@@ -51,7 +52,7 @@ class RecordEditDialog:
         
         # 标题
         title = "编辑记录" if self.record else "新增记录"
-        title_label = ctk.CTkLabel(main_frame, text=title, font=("微软雅黑", 16, "bold"))
+        title_label = ctk.CTkLabel(main_frame, text=title, font=get_font("subtitle"))
         title_label.pack(pady=(0, 20))
         
         # 表单框架
