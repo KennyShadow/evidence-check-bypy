@@ -119,7 +119,7 @@ class NewProjectDialog:
         cancel_btn = ctk.CTkButton(btn_container, text="取消", command=self.cancel, width=100)
         cancel_btn.pack(side="left", padx=(0, 10))
         
-        create_btn = ctk.CTkButton(btn_container, text="创建项目", command=self.create_project, width=100)
+        create_btn = ctk.CTkButton(btn_container, text="确定", command=self.create_project, width=100)
         create_btn.pack(side="left")
         
         # 绑定回车键
@@ -276,13 +276,13 @@ class ProjectListDialog:
         self.project_tree.heading("最后访问", text="最后访问")
         self.project_tree.heading("状态", text="状态")
         
-        # 设置列宽
-        self.project_tree.column("名称", width=150)
-        self.project_tree.column("描述", width=200)
-        self.project_tree.column("记录数", width=80)
-        self.project_tree.column("创建时间", width=150)
-        self.project_tree.column("最后访问", width=150)
-        self.project_tree.column("状态", width=80)
+        # 设置列宽和对齐
+        self.project_tree.column("名称", width=150, anchor="w")
+        self.project_tree.column("描述", width=200, anchor="w")
+        self.project_tree.column("记录数", width=80, anchor="center")
+        self.project_tree.column("创建时间", width=130, anchor="center")
+        self.project_tree.column("最后访问", width=130, anchor="center")
+        self.project_tree.column("状态", width=80, anchor="center")
         
         # 滚动条
         scrollbar_y = ttk.Scrollbar(list_frame, orient="vertical", command=self.project_tree.yview)
@@ -329,25 +329,21 @@ class ProjectListDialog:
         button_frame = ctk.CTkFrame(parent)
         button_frame.pack(fill="x", padx=5, pady=5)
         
-        # 左侧按钮
-        left_frame = ctk.CTkFrame(button_frame)
-        left_frame.pack(side="left", padx=5)
+        # 按钮容器 - 居中对齐
+        btn_container = ctk.CTkFrame(button_frame)
+        btn_container.pack(expand=True)
         
-        switch_btn = ctk.CTkButton(left_frame, text="切换项目", command=self.switch_to_selected_project, width=100)
-        switch_btn.pack(side="left", padx=2)
+        switch_btn = ctk.CTkButton(btn_container, text="切换项目", command=self.switch_to_selected_project, width=100)
+        switch_btn.pack(side="left", padx=5)
         
-        backup_btn = ctk.CTkButton(left_frame, text="备份", command=self.backup_selected_project, width=80)
-        backup_btn.pack(side="left", padx=2)
+        backup_btn = ctk.CTkButton(btn_container, text="备份项目", command=self.backup_selected_project, width=100)
+        backup_btn.pack(side="left", padx=5)
         
-        delete_btn = ctk.CTkButton(left_frame, text="删除", command=self.delete_selected_project, width=80)
-        delete_btn.pack(side="left", padx=2)
+        delete_btn = ctk.CTkButton(btn_container, text="删除项目", command=self.delete_selected_project, width=100)
+        delete_btn.pack(side="left", padx=5)
         
-        # 右侧按钮
-        right_frame = ctk.CTkFrame(button_frame)
-        right_frame.pack(side="right", padx=5)
-        
-        close_btn = ctk.CTkButton(right_frame, text="关闭", command=self.close, width=80)
-        close_btn.pack(side="right", padx=2)
+        close_btn = ctk.CTkButton(btn_container, text="关闭", command=self.close, width=80)
+        close_btn.pack(side="left", padx=(20, 5))
     
     def load_projects(self):
         """加载项目列表"""

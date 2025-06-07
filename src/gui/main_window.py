@@ -57,6 +57,14 @@ class MainWindow:
         self.page_size = 50  # 每页显示50条记录
         self.total_pages = 1
         
+        # 筛选状态管理
+        self.filter_states = {
+            "difference": set(),      # 差异状态筛选
+            "attachment": set(),      # 附件状态筛选  
+            "contract": set(),        # 合同状态筛选
+            "subject": set()          # 收入主体筛选
+        }
+        
         # 创建界面
         self.create_widgets()
         self.load_data()
@@ -138,30 +146,46 @@ class MainWindow:
         
         ctk.CTkLabel(filter_frame, text="数据筛选", font=("微软雅黑", 14, "bold")).pack(pady=10)
         
-        # 筛选选项
-        ctk.CTkLabel(filter_frame, text="差异状态:").pack(anchor="w", padx=10)
-        self.difference_filter = ctk.CTkOptionMenu(
-            filter_frame, values=["全部", "有差异", "无差异", "未确认"], command=self.apply_filters
+        # 筛选选项 - 改为按钮形式
+        # 差异状态筛选
+        diff_frame = ctk.CTkFrame(filter_frame)
+        diff_frame.pack(fill="x", padx=10, pady=5)
+        ctk.CTkLabel(diff_frame, text="差异状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.difference_filter_btn = ctk.CTkButton(
+            diff_frame, text="点击筛选", command=lambda: self.show_multi_filter("difference"), 
+            width=120, height=28
         )
-        self.difference_filter.pack(fill="x", padx=10, pady=2)
+        self.difference_filter_btn.pack(fill="x", padx=5, pady=2)
         
-        ctk.CTkLabel(filter_frame, text="附件状态:").pack(anchor="w", padx=10, pady=(10, 0))
-        self.attachment_filter = ctk.CTkOptionMenu(
-            filter_frame, values=["全部", "已关联附件", "未关联附件"], command=self.apply_filters
+        # 附件状态筛选
+        att_frame = ctk.CTkFrame(filter_frame)
+        att_frame.pack(fill="x", padx=10, pady=5)
+        ctk.CTkLabel(att_frame, text="附件状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.attachment_filter_btn = ctk.CTkButton(
+            att_frame, text="点击筛选", command=lambda: self.show_multi_filter("attachment"),
+            width=120, height=28
         )
-        self.attachment_filter.pack(fill="x", padx=10, pady=2)
+        self.attachment_filter_btn.pack(fill="x", padx=5, pady=2)
         
-        ctk.CTkLabel(filter_frame, text="合同状态:").pack(anchor="w", padx=10, pady=(10, 0))
-        self.contract_filter = ctk.CTkOptionMenu(
-            filter_frame, values=["全部", "新增合同", "现有合同"], command=self.apply_filters
+        # 合同状态筛选
+        contract_frame = ctk.CTkFrame(filter_frame)
+        contract_frame.pack(fill="x", padx=10, pady=5)
+        ctk.CTkLabel(contract_frame, text="合同状态:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.contract_filter_btn = ctk.CTkButton(
+            contract_frame, text="点击筛选", command=lambda: self.show_multi_filter("contract"),
+            width=120, height=28
         )
-        self.contract_filter.pack(fill="x", padx=10, pady=2)
+        self.contract_filter_btn.pack(fill="x", padx=5, pady=2)
         
-        ctk.CTkLabel(filter_frame, text="收入主体:").pack(anchor="w", padx=10, pady=(10, 0))
-        self.subject_filter = ctk.CTkOptionMenu(
-            filter_frame, values=["全部"], command=self.apply_filters
+        # 收入主体筛选
+        subject_frame = ctk.CTkFrame(filter_frame)
+        subject_frame.pack(fill="x", padx=10, pady=5)
+        ctk.CTkLabel(subject_frame, text="收入主体:", font=("微软雅黑", 11, "bold")).pack(anchor="w", padx=5)
+        self.subject_filter_btn = ctk.CTkButton(
+            subject_frame, text="点击筛选", command=lambda: self.show_multi_filter("subject"),
+            width=120, height=28
         )
-        self.subject_filter.pack(fill="x", padx=10, pady=2)
+        self.subject_filter_btn.pack(fill="x", padx=5, pady=2)
         
         ctk.CTkButton(filter_frame, text="清除筛选", command=self.clear_filters).pack(fill="x", padx=10, pady=10)
         
@@ -247,10 +271,8 @@ class MainWindow:
             self.current_records = self.database.get_all_income_records()
             self.filtered_records = self.current_records.copy()
             
-            # 更新收入主体筛选选项
-            subject_entities = self.data_processor.get_unique_values(self.current_records, "收入主体")
-            subject_options = ["全部"] + [entity for entity in subject_entities if entity]
-            self.subject_filter.configure(values=subject_options)
+            # 初始化筛选状态
+            self.init_filter_states()
             
             self.current_page = 1  # 重置到第一页
             self.refresh_table()
@@ -494,16 +516,8 @@ class MainWindow:
     def on_search(self, event=None):
         """搜索事件处理"""
         try:
-            search_text = self.search_entry.get().strip()
-            
-            if not search_text:
-                self.filtered_records = self.current_records.copy()
-            else:
-                self.filtered_records = self.data_processor.search_records(
-                    self.current_records, search_text
-                )
-            
-            self.apply_filters()
+            # 直接调用多选筛选方法，这会包含搜索逻辑
+            self.apply_multi_filters()
             
         except Exception as e:
             self.logger.error(f"搜索失败: {e}")
@@ -511,41 +525,9 @@ class MainWindow:
     def clear_search(self):
         """清除搜索"""
         self.search_entry.delete(0, "end")
-        self.filtered_records = self.current_records.copy()
-        self.apply_filters()
+        self.apply_multi_filters()
     
-    def apply_filters(self, selected_value=None):
-        """应用筛选条件"""
-        try:
-            # 获取当前筛选条件
-            difference_filter = self.difference_filter.get()
-            attachment_filter = self.attachment_filter.get()
-            contract_filter = self.contract_filter.get()
-            subject_filter = self.subject_filter.get()
-            
-            # 应用筛选
-            self.filtered_records = self.data_processor.filter_records(
-                self.current_records,
-                difference_status=difference_filter if difference_filter != "全部" else None,
-                attachment_status=attachment_filter if attachment_filter != "全部" else None,
-                contract_status=contract_filter if contract_filter != "全部" else None,
-                subject_entity=subject_filter if subject_filter != "全部" else None
-            )
-            
-            # 如果有搜索条件，再次应用搜索
-            search_text = self.search_entry.get().strip()
-            if search_text:
-                self.filtered_records = self.data_processor.search_records(
-                    self.filtered_records, search_text
-                )
-            
-            # 重置到第一页
-            self.current_page = 1
-            self.refresh_table()
-            self.update_statistics()
-            
-        except Exception as e:
-            self.logger.error(f"应用筛选失败: {e}")
+
 
     def go_first_page(self):
         """跳转到首页"""
@@ -578,13 +560,175 @@ class MainWindow:
         except ValueError:
             pass
     
+    def init_filter_states(self):
+        """初始化筛选状态（全选所有选项）"""
+        try:
+            # 差异状态选项
+            difference_options = ["有差异", "无差异", "未确认"]
+            self.filter_states["difference"] = set(difference_options)
+            
+            # 附件状态选项
+            attachment_options = ["已关联附件", "未关联附件"]
+            self.filter_states["attachment"] = set(attachment_options)
+            
+            # 合同状态选项
+            contract_options = ["新增合同", "现有合同"]
+            self.filter_states["contract"] = set(contract_options)
+            
+            # 收入主体选项
+            subject_entities = self.data_processor.get_unique_values(self.current_records, "收入主体")
+            self.filter_states["subject"] = set(entity for entity in subject_entities if entity)
+            
+            # 更新按钮文本
+            self.update_filter_button_texts()
+            
+        except Exception as e:
+            self.logger.error(f"初始化筛选状态失败: {e}")
+    
+    def update_filter_button_texts(self):
+        """更新筛选按钮的文本"""
+        try:
+            # 差异状态按钮
+            diff_count = len(self.filter_states["difference"])
+            diff_total = 3  # 总共3个选项
+            self.difference_filter_btn.configure(text=f"已选 {diff_count}/{diff_total}")
+            
+            # 附件状态按钮
+            att_count = len(self.filter_states["attachment"])
+            att_total = 2  # 总共2个选项
+            self.attachment_filter_btn.configure(text=f"已选 {att_count}/{att_total}")
+            
+            # 合同状态按钮
+            contract_count = len(self.filter_states["contract"])
+            contract_total = 2  # 总共2个选项
+            self.contract_filter_btn.configure(text=f"已选 {contract_count}/{contract_total}")
+            
+            # 收入主体按钮
+            subject_count = len(self.filter_states["subject"])
+            subject_entities = self.data_processor.get_unique_values(self.current_records, "收入主体")
+            subject_total = len([entity for entity in subject_entities if entity])
+            self.subject_filter_btn.configure(text=f"已选 {subject_count}/{subject_total}")
+            
+        except Exception as e:
+            self.logger.error(f"更新筛选按钮文本失败: {e}")
+    
+    def show_multi_filter(self, filter_type: str):
+        """显示多选筛选对话框"""
+        try:
+            from .multi_select_filter import MultiSelectFilterDialog
+            
+            # 获取选项和当前选中状态
+            if filter_type == "difference":
+                title = "差异状态"
+                items = ["有差异", "无差异", "未确认"]
+                selected = self.filter_states["difference"]
+            elif filter_type == "attachment":
+                title = "附件状态"
+                items = ["已关联附件", "未关联附件"]
+                selected = self.filter_states["attachment"]
+            elif filter_type == "contract":
+                title = "合同状态"
+                items = ["新增合同", "现有合同"]
+                selected = self.filter_states["contract"]
+            elif filter_type == "subject":
+                title = "收入主体"
+                items = list(self.data_processor.get_unique_values(self.current_records, "收入主体"))
+                items = [item for item in items if item]  # 过滤空值
+                selected = self.filter_states["subject"]
+            else:
+                return
+            
+            def on_apply(selected_items):
+                self.filter_states[filter_type] = selected_items
+                self.update_filter_button_texts()
+                self.apply_multi_filters()
+            
+            dialog = MultiSelectFilterDialog(self.root, title, items, selected, on_apply)
+            dialog.show()
+            
+        except Exception as e:
+            self.logger.error(f"显示多选筛选对话框失败: {e}")
+            messagebox.showerror("错误", f"显示筛选对话框失败: {e}")
+    
+    def apply_multi_filters(self):
+        """应用多选筛选"""
+        try:
+            # 从原始记录开始筛选
+            filtered = self.current_records.copy()
+            
+            # 应用搜索筛选
+            search_text = self.search_entry.get().strip().lower()
+            if search_text:
+                filtered = [record for record in filtered 
+                           if search_text in record.contract_id.lower() 
+                           or search_text in record.client_name.lower()
+                           or (record.subject_entity and search_text in record.subject_entity.lower())]
+            
+            # 应用差异状态筛选
+            if self.filter_states["difference"]:
+                def match_difference(record):
+                    if record.difference is None:
+                        return "未确认" in self.filter_states["difference"]
+                    elif record.difference == 0:
+                        return "无差异" in self.filter_states["difference"]
+                    else:
+                        return "有差异" in self.filter_states["difference"]
+                
+                filtered = [record for record in filtered if match_difference(record)]
+            
+            # 应用附件状态筛选
+            if self.filter_states["attachment"]:
+                def match_attachment(record):
+                    has_attachment = record.attachment_count > 0
+                    if has_attachment:
+                        return "已关联附件" in self.filter_states["attachment"]
+                    else:
+                        return "未关联附件" in self.filter_states["attachment"]
+                
+                filtered = [record for record in filtered if match_attachment(record)]
+            
+            # 应用合同状态筛选
+            if self.filter_states["contract"]:
+                def match_contract(record):
+                    is_new = record.change_status == "新增"
+                    if is_new:
+                        return "新增合同" in self.filter_states["contract"]
+                    else:
+                        return "现有合同" in self.filter_states["contract"]
+                
+                filtered = [record for record in filtered if match_contract(record)]
+            
+            # 应用收入主体筛选
+            if self.filter_states["subject"]:
+                filtered = [record for record in filtered 
+                           if record.subject_entity in self.filter_states["subject"]]
+            
+            self.filtered_records = filtered
+            self.current_page = 1  # 重置到第一页
+            self.refresh_table()
+            self.update_statistics()
+            
+            self.logger.info(f"筛选完成，显示 {len(filtered)} 条记录")
+            
+        except Exception as e:
+            self.logger.error(f"应用筛选失败: {e}")
+            messagebox.showerror("错误", f"应用筛选失败: {e}")
+    
     def clear_filters(self):
-        """清除所有筛选条件"""
-        self.difference_filter.set("全部")
-        self.attachment_filter.set("全部")
-        self.contract_filter.set("全部")
-        self.subject_filter.set("全部")
-        self.clear_search()
+        """清除所有筛选"""
+        try:
+            # 重置筛选状态为全选
+            self.init_filter_states()
+            
+            # 清除搜索框
+            self.search_entry.delete(0, "end")
+            
+            # 应用筛选
+            self.apply_multi_filters()
+            
+            self.logger.info("已清除所有筛选条件")
+        except Exception as e:
+            self.logger.error(f"清除筛选失败: {e}")
     
     def update_statistics(self):
         """更新统计信息"""

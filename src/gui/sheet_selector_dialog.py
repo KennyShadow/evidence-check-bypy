@@ -27,7 +27,8 @@ class SheetSelectorDialog:
         self.required_fields = {
             'contract_id': '合同号',
             'client_name': '客户名',
-            'income': '本年确认的收入'
+            'income': '本年确认的收入',
+            'subject_entity': '收入主体'
         }
         
         # 创建对话框窗口
@@ -207,7 +208,8 @@ class SheetSelectorDialog:
         descriptions = {
             'contract_id': '包含合同编号、合同号等信息的列',
             'client_name': '包含客户名称、公司名称等信息的列',
-            'income': '包含收入金额、确认收入等信息的列'
+            'income': '包含收入金额、确认收入等信息的列',
+            'subject_entity': '包含收入主体、实体、单位等信息的列'
         }
         return descriptions.get(field_key, '')
     
@@ -284,7 +286,8 @@ class SheetSelectorDialog:
         match_rules = {
             'contract_id': ['合同号', '合同编号', '契约号', 'contract'],
             'client_name': ['客户名', '客户名称', '公司名称', '企业名称', '客户', 'client', 'company'],
-            'income': ['本年确认的收入', '确认收入', '收入金额', '年度收入', '收入', '财报 收入', 'income', 'revenue']
+            'income': ['本年确认的收入', '确认收入', '收入金额', '年度收入', '收入', '财报 收入', 'income', 'revenue'],
+            'subject_entity': ['收入主体', '主体', '实体', '单位', 'entity', 'subject']
         }
         
         rules = match_rules.get(field_key, [])
@@ -325,7 +328,8 @@ class SheetSelectorDialog:
         target_names = {
             'contract_id': '合同号',
             'client_name': '客户名',
-            'income': '本年确认的收入'
+            'income': '本年确认的收入',
+            'subject_entity': '收入主体'
         }
         return target_names.get(field_key, field_key)
     

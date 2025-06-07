@@ -1,0 +1,14 @@
+{
+  "id": "新致2024_20250607_135025",
+  "name": "新致2024",
+  "description": "",
+  "created_time": "2025-06-07T13:50:25.747984",
+  "last_accessed": "2025-06-07T13:50:25.747990",
+  "project_dir": "projects\\新致2024_20250607_135025",
+  "data_dir": "projects\\新致2024_20250607_135025\\data",
+  "attachments_dir": "D:\\00-工作\\11\\22SZ001（产值框架）",
+  "backups_dir": "projects\\新致2024_20250607_135025\\backups",
+  "database_file": "projects\\新致2024_20250607_135025\\data\\database.pkl",
+  "record_count": 0,
+  "status": "active"
+}

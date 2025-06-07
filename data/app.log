@@ -1493,3 +1493,59 @@
 2025-06-07 13:38:16,438 - src.data.project_manager - INFO - 删除项目: 新致软件2024 (新致软件2024_20250607_133000)
 2025-06-07 13:38:33,805 - src.models.database - INFO - 成功保存数据库，共3501条记录
 2025-06-07 13:38:33,805 - src.gui.main_window - INFO - 程序正常退出
+2025-06-07 13:49:36,013 - __main__ - INFO - 启动 收入证据管理程序
+2025-06-07 13:49:36,727 - src.data.project_manager - INFO - 加载项目配置: 0 个项目
+2025-06-07 13:49:36,727 - src.data.project_manager - INFO - 项目管理器初始化，项目根目录: projects
+2025-06-07 13:49:36,736 - src.models.database - INFO - 成功加载数据库，共3501条记录
+2025-06-07 13:49:36,737 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: data\attachments
+2025-06-07 13:49:39,681 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:49:39,681 - src.gui.main_window - INFO - 主窗口初始化完成
+2025-06-07 13:49:39,681 - src.gui.main_window - INFO - 启动主界面
+2025-06-07 13:50:25,748 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:50:25,748 - src.data.project_manager - INFO - 创建项目成功: 新致2024 (新致2024_20250607_135025)
+2025-06-07 13:50:30,590 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:50:30,590 - src.data.project_manager - INFO - 切换到项目: 新致2024 (新致2024_20250607_135025)
+2025-06-07 13:50:31,548 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:50:31,548 - src.models.database - INFO - 数据库文件不存在，创建新数据库
+2025-06-07 13:50:31,548 - src.data.file_manager - INFO - 文件管理器初始化，存储路径: D:\00-工作\11\22SZ001（产值框架）
+2025-06-07 13:50:32,811 - src.gui.main_window - INFO - 加载了 0 条记录
+2025-06-07 13:50:32,812 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:50:32,812 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:50:32,813 - src.gui.main_window - INFO - 项目重新加载完成: 新致2024
+2025-06-07 13:50:56,269 - src.data.file_manager - INFO - 存储路径已更新为: D:\00-工作\11
+2025-06-07 13:50:56,783 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共474行数据
+2025-06-07 13:51:00,379 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:51:18,930 - src.data.excel_handler - INFO - 成功读取Excel文件: C:\Users\wkenn\Nutstore\2\00-坚果云共享\KENNY的工作文件\收入检查\【TO 审计】2024财报销售-0224.xlsx, 共3501行数据
+2025-06-07 13:51:18,931 - src.data.excel_handler - INFO - 使用用户指定的列映射: {'合同编号': '合同号', '客户': '客户名', '2024年\n财报收入': '本年确认的收入', '签约方': '收入主体'}
+2025-06-07 13:51:19,055 - src.data.excel_handler - INFO - 成功转换3501条记录
+2025-06-07 13:51:19,064 - src.models.database - INFO - 开始导入Excel数据，共3501条记录
+2025-06-07 13:51:19,065 - src.models.database - INFO - 开始批量更新数据...
+2025-06-07 13:51:19,065 - src.models.database - INFO - 已更新 1000/3501 条记录到内存
+2025-06-07 13:51:19,065 - src.models.database - INFO - 已更新 2000/3501 条记录到内存
+2025-06-07 13:51:19,066 - src.models.database - INFO - 已更新 3000/3501 条记录到内存
+2025-06-07 13:51:19,066 - src.models.database - INFO - 开始保存数据到文件...
+2025-06-07 13:51:19,077 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:51:19,077 - src.models.database - INFO - 导入Excel数据成功，共3501条记录
+2025-06-07 13:51:24,530 - src.gui.main_window - INFO - 加载了 3501 条记录
+2025-06-07 13:51:24,531 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:51:47,276 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:27,976 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:33,332 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:37,720 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:42,766 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:47,873 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:53,101 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:52:57,529 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:53:02,635 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:53:07,980 - src.gui.main_window - INFO - 筛选完成，显示 329 条记录
+2025-06-07 13:53:12,602 - src.gui.main_window - INFO - 筛选完成，显示 329 条记录
+2025-06-07 13:53:17,069 - src.gui.main_window - INFO - 筛选完成，显示 312 条记录
+2025-06-07 13:53:22,229 - src.gui.main_window - INFO - 筛选完成，显示 312 条记录
+2025-06-07 13:53:26,684 - src.gui.main_window - INFO - 筛选完成，显示 329 条记录
+2025-06-07 13:53:32,013 - src.gui.main_window - INFO - 筛选完成，显示 329 条记录
+2025-06-07 13:53:33,309 - src.gui.main_window - INFO - 筛选完成，显示 0 条记录
+2025-06-07 13:53:33,439 - src.gui.main_window - INFO - 筛选完成，显示 0 条记录
+2025-06-07 13:53:38,643 - src.gui.main_window - INFO - 筛选完成，显示 1876 条记录
+2025-06-07 13:54:12,798 - src.models.database - INFO - 成功保存数据库，共3501条记录
+2025-06-07 13:54:12,799 - src.data.project_manager - INFO - 项目配置保存成功
+2025-06-07 13:54:12,799 - src.gui.main_window - INFO - 程序正常退出
